@@ -5,4 +5,4 @@ type: "resource"
 comments: false
 ---
 
-* [aria2，破解百度云限速的傻瓜式教程](http://bbs.feng.com/forum.php?mod=viewthread&tid=10895696&extra=page=1&filter=author&orderby=dateline&orderby=dateline)
+* [aria2，破解百度云限速的傻瓜式教程](http://bbs.feng.com/forum.php?mod=viewthread&tid=10895696&extra=page=1&filter=author&orderby=dateline&orderby=dateline)（针对Mac系统百度云下载速度慢的解决办法）
