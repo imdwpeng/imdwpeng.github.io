@@ -213,31 +213,35 @@ Counter.defaultProps = { initialCount: 0 }
 组装生成这个组件的 HTML 结构（使用原生 HTML 标签或者子组件），也可以返回 `null` 或者 `false`，这时候 `ReactDOM.findDOMNode(this)` 会返回 `null`。
 **生命周期函数**
 组件的生命周期可分成三个状态：
-* Mounting：已插入真实 DOM
-* Updating：正在被重新渲染
-* Unmounting：已移出真实 DOM
+* **挂载**: 组件被插入到DOM中。
+* **更新**: 组件被重新渲染，查明DOM是否应该刷新。
+* **移除**: 组件从DOM中移除。
+
+React提供`生命周期`方法，可以在这些方法中放入自己的代码。有will方法，会在某些行为发生之前调用，和did方法，会在行为发生之后调用。
 
 生命周期的方法有：
-**装载组件触发**
-* **componentWillMount()** 
-在**渲染前**调用,在客户端也在服务端。
-* **componentDidMount()** 
-在**第一次渲染后**调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过`this.getDOMNode()`来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用`setTimeout`, `setInterval`或者发送`AJAX`请求等操作(防止异部操作阻塞UI)。
+**挂载**
+* `getInitialState()` 在组件被挂载之前调用。状态化的组件应该实现这个方法，返回初始的state数据。该方法在ES6中已被弃用，state需在`constructor`中设置。
+* `componentWillMount()` 在挂载发生之前立即被调用。
+* `componentDidMount()` 在挂载结束之后立即被调用。需要DOM节点的初始化操作应该放在这里。之后组件已经生成了对应的DOM结构，可以通过`this.getDOMNode()`来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用`setTimeout`, `setInterval`或者发送`AJAX`请求等操作(防止异部操作阻塞UI)。
 
-**更新组件触发**
-* **componentWillReceiveProps()** 
-在组件接收到一个**新**的`prop`时被调用。这个方法在初始化`render`时**不会**被调用。
-* **shouldComponentUpdate** 
-返回一个**布尔值**。在组件接收到新的`props`或者`state`时被调用。在初始化时或者使用forceUpdate时不被调用。
-可以在你确认不需要更新组件时使用。
-* **componentWillUpdate()** 
-当你的组件再次渲染时，在 `render` 函数执行前调用（在组件的 `prop` 或者 `state` 发生变化时触发该方法）
-* **componentDidUpdate()** 
-在组件**完成更新后**立即调用。(在 `render` 函数执行完毕后，且更新的组件已被同步至 DOM 后立即调用)
+**更新**
+* `componentWillReceiveProps(object nextProps)` 当一个挂载的组件接收到新的props时被调用。该方法用于比较this.props和nextProps，然后使用`this.setState()`来改变state。这个方法在初始化`render`时**不会**被调用。
 
-**卸载组件触发**
-* **componentWillUnmount** 
-在组件从 DOM 中移除的时候立刻被调用。
+```javascript
+componentWillReceiveProps: function(nextProps) {  
+  this.setState({
+    likesIncreasing: nextProps.likeCount > this.props.likeCount
+  });
+}
+```
+
+* `shouldComponentUpdate(object nextProps, objct nextState):boolean` 当组件做出是否要更新DOM的决定时被调用，实现该函数，优化`this.props`和`nextProps`，以及`this.state`和nextState的比较，如果不需要React更新DOM，则返回false。  
+* `componentWillUpdate(object nextProps,object nextState)` 在更新发生之前被调用。可在这里调用`this.setState()`。
+* `componentDidUpdate(object prevProps,object prevState)` 在更新发生之后被调用。
+
+**移除**
+* `componentWillUnmount()` 在组件移除和销毁之前被调用。清理工作应放在这里。
 
 以下实例初始化 state ， setNewCount 用于更新 state。所有生命周期在 Counter 组件中。
 ```javascript

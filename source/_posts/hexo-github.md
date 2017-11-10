@@ -33,7 +33,7 @@ categories: "hexo"
   cd /Hexo
   npm instal
   hexo generate（可简写为hexo g）
-  hexo sever（可简写为hexo s
+  hexo sever（可简写为hexo s)
 ```
 命令解释:
 
