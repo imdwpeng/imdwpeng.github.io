@@ -7,9 +7,7 @@ categories: "hexo"
 
 ![hexo](http://o71mbfad2.bkt.clouddn.com/07_hexo-blog-basic1_80.jpg)
 
-做程序员一年多了，也收藏了不少好文章，各种奇淫技巧，于是乎就想弄个博客整理整理，方便收藏和分享。
-
-在网上搜了各种教程，可以利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。
+本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。
 
 <!--more-->
 
