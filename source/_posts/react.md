@@ -552,7 +552,11 @@ Data Flow 只是一种应用架构的方式，比如数据如何存放，如何�
 正因为它是这样一种概念，所以涌现了许多实现，这里主要关注一种实现--`Redux`
 ### Redux
 
-
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 
 
 

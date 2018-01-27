@@ -1,5 +1,5 @@
 ---
-title: css-clear
+title: 【css】常见的清除浮动方法
 date: 2016-08-03 22:17:00
 tags: "css"
 categories: "css"
@@ -103,6 +103,11 @@ categories: "css"
 优点：无需额外的标签，浏览器兼容性好，是目前用的最多的一种清除浮动的方法之一；
 缺点：代码稍微复杂点，初学者可能不太能理解其原理；
 
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 
 
 

@@ -503,6 +503,11 @@ Event.emit('test', 'hello');    //输出 hello   test
 ```
 总的来说，观察者模式所做的工作就是在解耦，让耦合的双方都依赖于抽象，而不是依赖于具体。从而使得各自的变化都不会影响到另一边的变化。
 
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 
 
 

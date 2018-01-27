@@ -193,5 +193,9 @@ type: “tags”这里的值根据你想更改的页面决定
 
 更多高级功能可以查看[hexo高阶教程next主题优化之加入网易云音乐、网易云跟帖、动态背景、自定义主题、统计功能](http://cherryblog.site/Hexo-high-level-tutorialcloudmusic,bg-customthemes-statistical.html)文章。
 
-
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 

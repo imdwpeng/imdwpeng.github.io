@@ -1,5 +1,5 @@
 ---
-title: css布局
+title: 【css】常见布局方案归纳
 date: 2016-07-25 21:16:01
 tags: "css"
 categories: "css"
@@ -392,6 +392,11 @@ float + 负margin + margin
 </div>
 ```
 
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 
  
 

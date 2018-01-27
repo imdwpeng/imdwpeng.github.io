@@ -358,7 +358,11 @@ git remote add origin git@github.com:FBing/java-code-generator
 xcode-select --install
 ```
 
-
+<footer>
+<hr/>
+![footer](footer.gif)
+<p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
+</footer>
 
   [1]: http://imdwpeng.b0.upaiyun.com/git/git-80375749051507889668206.jpg
   [2]: http://imdwpeng.b0.upaiyun.com/git/123-94318092011508120268646.png
