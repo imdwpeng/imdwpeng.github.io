@@ -1,6 +1,6 @@
 ---
 title: 【JS】菜鸟学闭包
-date: 2018-02-22 19:21:54
+date: 2017-10-05 19:21:54
 tags:
 ---
 ![closure](index.jpeg)
