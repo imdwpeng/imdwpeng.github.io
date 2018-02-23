@@ -13,3 +13,8 @@ comments: false
 * [JavaScript设计模式](https://pan.baidu.com/s/1kU6kxeB)   
 密码: emwv
 
+* [JavaScript高级程序设计（第3版）](https://pan.baidu.com/s/1nxf2ESD)   
+密码: 2q4q
+
+* [深入React技术栈 陈屹著](https://pan.baidu.com/s/1jJfs7qQ)   
+密码: x6rk
