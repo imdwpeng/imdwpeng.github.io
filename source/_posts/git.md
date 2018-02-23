@@ -1,7 +1,8 @@
 ---
 title: Git 学习手扎
 date: 2017-09-16 03:49:22
-tags: git
+tags: 'git'
+categories: 'git'
 ---
 
 ![git](1.jpeg)

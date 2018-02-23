@@ -1,7 +1,8 @@
 ---
 title: 【JS】菜鸟学闭包
 date: 2017-10-05 19:21:54
-tags:
+tags: ['js','闭包']
+categories: 'js'
 ---
 ![closure](index.jpeg)
 相信学习前端的小伙伴们，对这个词应该并不陌生吧，闭包（closure）是JS的一个重点和难点。

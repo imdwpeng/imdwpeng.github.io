@@ -1,7 +1,7 @@
 ---
 title: React学习
 date: 2017-06-18 13:06:54
-tags: 'react'
+tags: ['js','react']
 categories: 'react'
 ---
 <img class="react-img" src="./react/logo.png"/>
