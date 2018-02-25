@@ -46,7 +46,7 @@ http://www.cnblogs.com/a.html http://www.a.com/b.html|不同域名|不允许
 优点：对于浏览器兼容性良好；
 缺点：只能用于GET请求，并且需要后端配合对接口做一定的改变。
 **原生js实现jsonp**
-```
+```javascript
 //回调函数
 function showData(data) {
     for (let i in data) {
@@ -69,7 +69,7 @@ getInfo();
 ```
 当执行`getInfo()`时，就发送`http://xxxx/xx.php?callback=showData`请求，正常请求该接口时，服务端会直接返回数据，如`{msg:'hello'}`；而当用jsonp时，服务端会接受这个callback参数，然后用这个参数值包装要返回的数据，如`showData({msg:'hello'})`，并且该函数会被立即执行。
 **jQuery实现jsonp**
-```
+```javascript
 $.ajax({
     url: 'http://xxx/xx?callback=?', //不指定回调名，可省略callback参数，会由jQuery自动生成
     dataType: 'jsonp',
@@ -86,7 +86,7 @@ $.ajax({
 前提条件：这两个域名必须属于同一个基础域名！而且所用的协议，端口都要一致，否则无法利用`document.domain`进行跨域。
 原理：两个页面都通过js强制设置`document.domain`为基础主域，就实现了同域。
 如：父页面（http://www.blog.com/a.html）
-```
+```javascript
 <iframe id="iframe" src="http://about.blog.com/b.html"></iframe>
 <script>
     document.domain = 'blog.com';
@@ -94,7 +94,7 @@ $.ajax({
 </script>
 ```
 子页面（http://about.blog.com/b.html）
-```
+```javascript
 <script>
     document.domain = 'blog.com';
     // 获取父窗口中变量
@@ -126,7 +126,8 @@ $.ajax({
 3. cross.html与first.html同域，可直接通过`js`访问来通信。
 
 first.html(http://www.first.com/first.html)
-```
+
+```javascript
 <iframe id="iframe" src="http://www.second.com/second.html" style="display: none;"></iframe>
 <input type="button" onClick="changeColor()" value="change color" id="btn"/>
 
@@ -144,8 +145,9 @@ first.html(http://www.first.com/first.html)
     }
 </script>
 ```
+
 second.html(http://www.second.com/second.html)
-```
+```javascript
 <iframe id="iframe" src="http://www.first.com/cross.html" style="display: none;"></iframe>
 
 <script>
@@ -158,7 +160,7 @@ second.html(http://www.second.com/second.html)
 </script>
 ```
 cross.html(http://www.first.com/cross.html)
-```
+```javascript
 <script>
     window.onhashchange = function () {
         window.parent.parent.onCallback(location.hash);
@@ -176,7 +178,7 @@ cross.html(http://www.first.com/cross.html)
 比如有个http://www.a.com/a.html页面，需要通过a.html页面里的`js`来获取另一个位于不同域上的页面www.b.com/b.html里的数据。
 
 a.html(http://www.a.com/a.html)
-```
+```javascript
 <iframe id="iframe" src="www.b.com/b.html" style="display: none;" onload="getData()"></iframe>
 
 <script>
@@ -195,7 +197,7 @@ a.html(http://www.a.com/a.html)
 </script>
 ```
 b.html(http://www.b.com/b.html)
-```
+```javascript
 <script>
     window.name = '{name:"eric",age:27,sex:"man"}';
 </script>
@@ -216,7 +218,7 @@ windowObj.postMessage(message,targetOrigin)
 
 比如有两个页面：www.a.com/a.html和www.b.com/b.html，用`window.postMessage`来实现两个页面之间相互通信。
 a.html(www.a.com/a.html)
-```
+```javascript
 <iframe id="iframe" src="www.b.com/b.html" style="display: none;"></iframe>
 
 <script>
@@ -239,7 +241,7 @@ a.html(www.a.com/a.html)
 </script>
 ```
 b.html(www.b.com/b.html)
-```
+```javascript
 <script>
     // 接收a.html的数据
     window.addEventListener('message', function (e) {
@@ -269,7 +271,7 @@ a.html页面加载完成时，向b.html传送跨域数据，b.html接收到该�
 详细解析可以参考阮一峰的`跨域资源共享 CORS 详解`（http://www.ruanyifeng.com/blog/2016/04/cors.html），
 主要设置在服务端，这里简单举个例子来演示：
 前端设置：
-```
+```javascript
 var xhr = new XMLHttpRequest(); // IE8/9需用window.XDomainRequest兼容
 
 // 前端设置是否带cookie
@@ -287,7 +289,7 @@ xhr.onreadystatechange = function() {
 ```
 服务端设置：
 Java后台：
-```
+```java
 /*
  * 导入包：import javax.servlet.http.HttpServletResponse;
  * 接口参数中定义：HttpServletResponse response
@@ -297,7 +299,7 @@ response.setHeader("Access-Control-Allow-Origin", "http://www.a.com"); // 若有
 response.setHeader("Access-Control-Allow-Credentials", "true");
 ```
 PHP后台：
-```
+```php
 // 设置允许其他域名访问
 header('Access-Control-Allow-Origin:*');
 // 设置允许的响应类型
@@ -306,7 +308,7 @@ header('Access-Control-Allow-Methods:POST, GET');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 ```
 NodeJs后台：
-```
+```javascript
 var http = require('http');
 var server = http.createServer();
 var qs = require('querystring');

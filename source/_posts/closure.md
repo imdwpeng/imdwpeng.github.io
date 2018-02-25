@@ -23,7 +23,7 @@ categories: 'js'
 提到闭包的产生，我们不得不提下JS的变量作用域。
 JS的变量作用域有两种：`全部变量`和`局部变量`。
 **在JS语言中，在函数内部可以访问`全局变量`，而在函数外部不能访问其他函数的`局部变量`。**什么意思呢？举个形象的例子，就比如，公园是开放的，我们都可以随便去公园里散步，但是每个人的房子是私人的，你会让别人随便去你家的后花园散步吗？答案是否定的，我们来看个例子：
-```
+```javascript
 var name = 'eric';
 
 function func() {
@@ -34,7 +34,7 @@ func();    // eric
 ```
 定义全局变量`name`，当执行`func`函数时，可以输出全局变量`name`为`eric`，在看下面的这个例子：
 
-```
+```javascript
 function func() {
     var name = 'eric';
 }
@@ -43,7 +43,7 @@ console.log(name);    // error
 ```
 在函数`func`内部定义局部变量`name`，然后全局环境下输出`name`，结果为空，因为我们在`func`函数外是访问不到`func`函数内部定义的局部变量的。
 那么如果因为某些需求，我们需要在函数外部访问到其他函数内部的局部变量，这该如何实现呢？
-```
+```javascript
 function func() {
     var name = 'eric';
 
@@ -68,7 +68,7 @@ todo();    // eric
 
 ### 维护变量
 闭包也可以将局部变量常驻内存，防止被GC回收。
-```
+```javascript
 function func() {
     var num = 0;
 
@@ -92,7 +92,7 @@ count1();   // 3
 
 ### 在函数执行前提供参数
 如`setTimeout`函数在执行的时候是无法传递参数的，那对于这种情况，我们可以用闭包来实现传参。
-```
+```javascript
 function func1(num) {
     console.log(num);
 }
@@ -113,7 +113,7 @@ setTimeout(func2(2), 1000);    // 等待一秒后，输出2
 学习前端，关键在于多练，代码敲多了，自然而然就会了，下面来介绍几个闭包的经典实例，来帮助大家巩固闭包知识。
 ### 循环记录数组（或者循环绑定事件）
 这是最经典的闭包面试题，相信很多人看到这例子应该都会印象深刻吧，前端第一次找工作时，这道题估计被我们刷的滚瓜烂熟了吧。
-```
+```javascript
 var attr = [];
 for (var i = 0; i < 10; i++) {
     attr[i] = function () {
@@ -126,7 +126,7 @@ attr[1]();    //10
 我们需要的一个1到10的数组，如果按上述代码这样执行，我们会发现最终保存的数组里每个值都为10。这是因为变量i在整个函数内都有效，没有得到释放。所以每一次循环，新的i值都会覆盖旧值，导致最后输出的是最后一轮的i的值。大白话就是你还没执行`attr[1]()`函数，for循环就执行完了，最终i值为10，所以等你执行`attr[1]()`函数时，取到的就是最终的i值，即10。
 解决思路：
 方法一、采用闭包形式，把变量值存起来
-```
+```javascript
 var attr = [];
 for (var i = 0; i < 10; i++) {
     attr[i] = (function (num) {
@@ -138,7 +138,7 @@ attr[1];    // 1
 ```
 此方法是采用立即执行函数增加诺干个闭包域空间将变量储存起来，建立私有变量`num`，尽管引用的`i`值随外部变化而变化，但私有变量`num`始终不变，这个其实可以理解成`attr[i]=i`。
 方法二、
-```
+```javascript
 var attr = [];
 for (var i = 0; i < 10; i++) {
 	(function(num){
@@ -154,7 +154,7 @@ attr[1]();    //1
 不同的是方法一是直接将新增的匿名函数中返回的值赋给数组，也就是说我们最终获得的是一组值的数组，而不是一个函数集合，效果同`attr[i]=i`是相同的；本例是在新增的匿名闭包空间内将函数赋值给变量`attr[i]`，最终获得的是一个函数集合。
 
 ### 嵌套函数
-```
+```javascript
 function fun(x, y) {
     console.log(y);
     return {
@@ -179,7 +179,7 @@ c.fun(3);                    // 1
 如果不能理清逻辑，建议你拿支笔在纸上画下，下面跟着我的逻辑来过一遍：
 `fun()`函数接受两个变量`x`,`y`，如果只输入一个变量，则第二个变量就是`undefined`。
 首先`var a = fun(0)`，执行如下：
-```
+```javascript
 fun(0,y){    // x=0,y=undefined
     console.log(y);   // undefined,因为未定义y值
     return {
@@ -190,13 +190,13 @@ fun(0,y){    // x=0,y=undefined
 }
 ```
 结果返回一个`fun`属性，指向一个函数对象，该对象带有闭包，可以访问到`fun()`函数的局部变量`x`，`x`此时为0，即：
-```
+```javascript
 function(z){
     return fun(z,0);
 }
 ```
 然后执行`a.fun(1)`，传入z的值为1，即执行fun(1,0);
-```
+```javascript
 fun(1,0){    // x=1,y=0
     consoel.log(0);    // 0
     ...
@@ -204,7 +204,7 @@ fun(1,0){    // x=1,y=0
 ```
 同理，执行`a.fun(2)`、`a.fun(3)`时，分别传入z的值为2，3，即分别执行`fun(2,0)`和`fun(3,0)`，输出结果都为0。
 然后`var b = fun(0).fun(1).fun(2).fun(3)`，我们拆开一个一个看，与等同于下面这个：
-```
+```javascript
 var b0 = fun(0),       // undefined
     b1 = b0.fun(1),    // 0
     b2 = b1.fun(2),
@@ -212,7 +212,7 @@ var b0 = fun(0),       // undefined
 ```
 `b0`和`b1`同之前的`a`和`a.fun(1)`是一样的道理，这里直接跳过，如果还不太清楚可以返回去再看一下a的解析过程。
 当执行`b1 = b0.fun(1)`时，又会返回一个`fun`属性：
-```
+```javascript
 fun(1,0){    
     consoel.log(0);    // 0
     return {
@@ -224,7 +224,7 @@ fun(1,0){
 ```
 同理，该`fun`属性也指向一个函数对象，该对象带有闭包，可以访问到`fun()`函数的局部变量`x`，`x`此时为1，这就跟执行`var b0 = fun(0)`的道理是一样的。
 然后执行`b2 = b1.fun(2)`，这个和执行`b1 = b0.fun(1)`又是一样的：
-```
+```javascript
 fun(2,1){    
     consoel.log(0);    // 1
     return {
@@ -241,7 +241,7 @@ fun(2,1){
 
 > **this**对象是运行时基于函数的执行环境绑定的：在全局函数中，`this`等于`window`，而当函数被作为某个对象的方法调用时，`this`等于那个对象。    --《Javascript高级程序设计》
 
-```
+```javascript
 var name = "The Window";
 var object = {
     name: "My object",
@@ -255,7 +255,7 @@ alert(object.getNameFunc()());    // "The Window"
 ```
 为什么最后输出的不是My Object，而是The Window呢，让我们来解析下。
 首先，把最后一句拆开：
-```
+```javascript
 var a = object.getNameFunc();
 var b = a();
 ```
@@ -263,7 +263,7 @@ var b = a();
 第二部，调用`a`函数，即调用该匿名函数，此时我们会发现该匿名函数是在全局环境下被调用的，而不是在`object`对象中被调用，所以`this`指向的是全局环境，即`window`。
 那么，如何才能获取外部作用域中的`this`呢？
 我们可以将该this单独保存成闭包变量：
-```
+```javascript
 var name = "The Window";
 var object = {
     name: "My object",
