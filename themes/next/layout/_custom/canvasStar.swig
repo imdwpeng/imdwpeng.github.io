@@ -24,12 +24,12 @@
         draw() {
             let {ctx, x, y, width, height} = this;
 
-            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 600);
+            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 400);
             gradient.addColorStop(0, 'rgb(255,255,255)');
             gradient.addColorStop(0.01, 'rgb(70,70,80)');
             gradient.addColorStop(0.2, 'rgb(40,40,50)');
             gradient.addColorStop(0.4, 'rgb(20,20,30)');
-            gradient.addColorStop(1, 'rgb(0,0,10)');
+            gradient.addColorStop(1, 'rgb(11,14,33)');
 
             ctx.save();
             ctx.fillStyle = gradient;
