@@ -29,7 +29,7 @@ categories: "hexo"
   cd /
   hexo init Hexo
   cd /Hexo
-  npm instal
+  npm install
   hexo generate（可简写为hexo g）
   hexo sever（可简写为hexo s)
 ```
