@@ -3,6 +3,8 @@
 
 ```brash
 git clone -b blog-source https://github.com/imdwpeng/imdwpeng.github.io.git
+npm install hexo-cli -g
+cd 本地仓库
+npm install
 ```
 
-npm install

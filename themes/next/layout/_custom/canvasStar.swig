@@ -3,6 +3,9 @@
 夜空背景
 #}
 <canvas id="canvas"></canvas>
+<div class="bg-night">
+    <img src="../../images/1.png">
+</div>
 
 <script type="text/javascript">
 
