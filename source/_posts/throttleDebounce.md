@@ -1,10 +1,10 @@
 ---
 title: 【JS】JavaScript节流和防抖
-date: 2018-03-09 20:13:20
+date: 2017-12-09 20:53:40
 tags: "js"
 categories: "js"
 ---
-![节流和防抖](index.jpeg)
+![title](index.jpeg)
 针对一些会频繁触发的事件如`scroll`、`resize`，如果正常绑定事件处理函数的话，有可能在很短的时间内多次连续触发事件，十分影响性能。
 因此针对这类事件要进行防抖动或者节流处理。
 
@@ -72,9 +72,8 @@ document.getElementById('name').addEventListener('keydown', () => {
 });
 ```
 上述代码中，我们绑定输入框的`keydown`事件，只有在停止输入1秒后才会去验证输入框的内容。
-
 <footer>
 <hr/>
-![footer](footer.gif)
+![footer](http://dwpblog.site/images/footer.gif)
 <p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
 </footer>
