@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="346a7a3b-341e-4391-ade5-1cd149044e45" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/_posts/debounceAndThrottle.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/_posts/debounceAndThrottle/footer.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/source/_posts/debounceAndThrottle/index.jpeg" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scaffolds/post.md" afterPath="$PROJECT_DIR$/scaffolds/post.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/next/layout/_custom/canvasStar.swig" afterPath="$PROJECT_DIR$/themes/next/layout/_custom/canvasStar.swig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig" afterPath="$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig" />
-    </list>
+    <list default="true" id="346a7a3b-341e-4391-ade5-1cd149044e45" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -23,12 +15,36 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="external-fonts.swig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="46" column="73" lean-forward="false" selection-start-line="46" selection-start-column="53" selection-end-line="46" selection-end-column="73" />
-              <folding />
+      <file leaf-file-name="npm-publish.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/npm-publish.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="1386">
+                <caret line="292" column="122" lean-forward="false" selection-start-line="292" selection-start-column="122" selection-end-line="292" selection-end-column="122" />
+                <folding>
+                  <marker date="1520603053611" expanded="true" signature="1232:1332" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="1247:1330" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="1474:2424" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="1489:2422" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="1520:2406" ph="&lt;table/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="1544:1763" ph="&lt;thead/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="1568:1738" ph="&lt;tr/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="1780:2385" ph="&lt;tbody/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="1804:1978" ph="&lt;tr/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="1995:2169" ph="&lt;tr/&gt;" />
+                  <marker date="1520603053611" expanded="true" signature="2186:2360" ph="&lt;tr/&gt;" />
+                  <marker date="1520603053611" expanded="false" signature="2492:2557" ph="..." />
+                  <marker date="1520603053611" expanded="true" signature="3085:3195" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="3464:3573" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="3479:3525" ph="[...]" />
+                  <marker date="1520603053611" expanded="true" signature="3540:3571" ph="[...]" />
+                  <marker date="1520603053611" expanded="false" signature="4068:4161" ph="..." />
+                  <marker date="1520603053611" expanded="true" signature="4191:4331" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="4206:4329" ph="{...}" />
+                  <marker date="1520603053611" expanded="true" signature="4237:4312" ph="&lt;div/&gt;" />
+                </folding>
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -122,6 +138,7 @@
         <option value="$PROJECT_DIR$/themes/next/layout/_custom/canvasStar.swig" />
         <option value="$PROJECT_DIR$/themes/next/source/css/fonts.css" />
         <option value="$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig" />
+        <option value="$PROJECT_DIR$/source/_posts/npm-publish.md" />
       </list>
     </option>
   </component>
@@ -186,46 +203,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="imdwpeng.github.io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="imdwpeng.github.io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="next" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="imdwpeng.github.io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="imdwpeng.github.io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="next" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="source" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -240,11 +217,21 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
+              <option name="myItemId" value="source" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="next" />
+              <option name="myItemId" value="_posts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -252,7 +239,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="_posts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="npm-publish" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -275,11 +266,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/source/_posts/npm-publish" />
       <recent name="$PROJECT_DIR$/source/_posts/throttleDebounce" />
       <recent name="$PROJECT_DIR$/themes/next/source/images" />
       <recent name="$PROJECT_DIR$/source/_posts/debounceAndThrottle" />
       <recent name="$PROJECT_DIR$/source/_posts/cross-domain" />
-      <recent name="$PROJECT_DIR$/source/_posts/closure" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/themes/next/source/images" />
@@ -407,12 +398,12 @@
       <workItem from="1519445271088" duration="15209000" />
       <workItem from="1519539661706" duration="7100000" />
       <workItem from="1519644508407" duration="4320000" />
-      <workItem from="1520597471928" duration="3473000" />
+      <workItem from="1520597471928" duration="5258000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="80205000" />
+    <option name="totallyTimeSpent" value="81990000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="724" extended-state="6" />
@@ -424,7 +415,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753164" sideWeight="0.4940429" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40189874" sideWeight="0.4940429" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40189874" sideWeight="0.4940429" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -464,20 +455,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/local/lib/node_modules/babel-cli/lib/babel/util.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="43" column="1" lean-forward="true" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/themes/next/layout/_macro/sidebar.swig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/themes/next/layout/_macro/post.swig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
@@ -916,9 +893,46 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
+        <state relative-caret-position="417">
           <caret line="46" column="73" lean-forward="false" selection-start-line="46" selection-start-column="53" selection-end-line="46" selection-end-column="73" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/npm-publish/package-1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/npm-publish.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1386">
+            <caret line="292" column="122" lean-forward="false" selection-start-line="292" selection-start-column="122" selection-end-line="292" selection-end-column="122" />
+            <folding>
+              <marker date="1520603053611" expanded="true" signature="1232:1332" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="1247:1330" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="1474:2424" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="1489:2422" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="1520:2406" ph="&lt;table/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="1544:1763" ph="&lt;thead/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="1568:1738" ph="&lt;tr/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="1780:2385" ph="&lt;tbody/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="1804:1978" ph="&lt;tr/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="1995:2169" ph="&lt;tr/&gt;" />
+              <marker date="1520603053611" expanded="true" signature="2186:2360" ph="&lt;tr/&gt;" />
+              <marker date="1520603053611" expanded="false" signature="2492:2557" ph="..." />
+              <marker date="1520603053611" expanded="true" signature="3085:3195" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="3464:3573" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="3479:3525" ph="[...]" />
+              <marker date="1520603053611" expanded="true" signature="3540:3571" ph="[...]" />
+              <marker date="1520603053611" expanded="false" signature="4068:4161" ph="..." />
+              <marker date="1520603053611" expanded="true" signature="4191:4331" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="4206:4329" ph="{...}" />
+              <marker date="1520603053611" expanded="true" signature="4237:4312" ph="&lt;div/&gt;" />
+            </folding>
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
