@@ -13,8 +13,6 @@ install:
   - npm install
 
 before_script:
-  - git config user.name "${U_NAME}"
-  - git config user.email "${U_EMAIL}"
 
 # 无其他依赖项所以执行npm test 构建就行了
 script:
@@ -24,6 +22,13 @@ script:
 # 阶段成功时执行
 after_success:
   - hexo deploy
+  - cd ./public
+  - git init
+  - git config user.name "${U_NAME}"
+  - git config user.email "${U_EMAIL}"
+  - git add .
+  - git commit -m "Update tools"
+  - git push --force --quiet "https://${GIT_TOKEN}@${GH_REF}" master:master
 
 # E: Build LifeCycle
 
