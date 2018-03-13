@@ -20,7 +20,7 @@ categories: "npm"
  - **test**： 测试代码目录
 
 这是截图我的目录结构，供大家参考：
-(此处应有图片catalogue)
+![catalogue](catalogue.png)
  
 ## 创建模块
 ```
