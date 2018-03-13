@@ -1,5 +1,5 @@
 ---
-title: 【Git】使用Travis CI持续集成
+title: 【Git】持续集成之Travis CI自动化部署
 date: 2018-03-12 11:39:15
 tags: "github travis-ci 自动化部署"
 categories: "github"
