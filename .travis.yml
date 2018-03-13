@@ -13,6 +13,8 @@ install:
   - npm install
 
 before_script:
+  - git config user.name "${U_NAME}"
+  - git config user.email "${U_EMAIL}"
 
 # 无其他依赖项所以执行npm test 构建就行了
 script:
