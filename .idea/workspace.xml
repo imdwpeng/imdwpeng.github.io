@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="346a7a3b-341e-4391-ade5-1cd149044e45" name="Default" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/source/_posts/webpack.md" afterPath="" />
       <change beforePath="$PROJECT_DIR$/source/_posts/webpack/footer.gif" afterPath="" />
       <change beforePath="$PROJECT_DIR$/source/about/index.md" afterPath="$PROJECT_DIR$/source/about/index.md" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,6 +24,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
       <file leaf-file-name="index.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/about/index.md">
           <provider selected="true" editor-type-id="text-editor">
@@ -46,6 +51,38 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+=======
+      <file leaf-file-name="npm-publish.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/npm-publish.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="156">
+                <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+                <folding>
+                  <marker date="1521025532423" expanded="true" signature="1242:1342" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="1257:1340" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="1484:2434" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="1499:2432" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="1530:2416" ph="&lt;table/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="1554:1773" ph="&lt;thead/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="1578:1748" ph="&lt;tr/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="1790:2395" ph="&lt;tbody/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="1814:1988" ph="&lt;tr/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="2005:2179" ph="&lt;tr/&gt;" />
+                  <marker date="1521025532423" expanded="true" signature="2196:2370" ph="&lt;tr/&gt;" />
+                  <marker date="1521025532423" expanded="false" signature="2502:2567" ph="..." />
+                  <marker date="1521025532423" expanded="true" signature="3095:3205" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="3474:3583" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="3489:3535" ph="[...]" />
+                  <marker date="1521025532423" expanded="true" signature="3550:3581" ph="[...]" />
+                  <marker date="1521025532423" expanded="false" signature="4078:4171" ph="..." />
+                  <marker date="1521025532423" expanded="true" signature="4201:4341" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="4216:4339" ph="{...}" />
+                  <marker date="1521025532423" expanded="true" signature="4247:4322" ph="&lt;div/&gt;" />
+                </folding>
+              </first_editor>
+              <second_editor />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
             </state>
           </provider>
         </entry>
@@ -139,9 +176,12 @@
         <option value="$PROJECT_DIR$/themes/next/layout/_custom/canvasStar.swig" />
         <option value="$PROJECT_DIR$/themes/next/source/css/fonts.css" />
         <option value="$PROJECT_DIR$/themes/next/layout/_partials/head/external-fonts.swig" />
-        <option value="$PROJECT_DIR$/source/_posts/npm-publish.md" />
         <option value="$PROJECT_DIR$/source/_posts/travis-ci.md" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/source/about/index.md" />
+=======
+        <option value="$PROJECT_DIR$/source/_posts/npm-publish.md" />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
       </list>
     </option>
   </component>
@@ -183,6 +223,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
       <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
@@ -207,6 +248,78 @@
           <select />
         </subPane>
       </pane>
+=======
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_posts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="imdwpeng.github.io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_posts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="npm-publish" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -357,19 +470,31 @@
       <workItem from="1519539661706" duration="7100000" />
       <workItem from="1519644508407" duration="4320000" />
       <workItem from="1520597471928" duration="5258000" />
+<<<<<<< HEAD
       <workItem from="1520856986536" duration="661000" />
       <workItem from="1522422067792" duration="3103000" />
+=======
+      <workItem from="1520856986536" duration="847000" />
+      <workItem from="1521025452278" duration="121000" />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="85754000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
+=======
+    <option name="totallyTimeSpent" value="82958000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1280" height="724" extended-state="6" />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494043" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494043" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26740506" sideWeight="0.5059571" order="7" side_tool="true" content_ui="tabs" />
@@ -632,6 +757,7 @@
         <state />
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/source/_posts/webpack.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -677,6 +803,52 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/source/_posts/travis-ci.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="494">
+            <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <folding>
+              <marker date="1521025532425" expanded="true" signature="2487:2532" ph="{...}" />
+              <marker date="1521025532425" expanded="true" signature="2874:2964" ph="{...}" />
+              <marker date="1521025532425" expanded="true" signature="2911:2960" ph="{...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/npm-publish.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="156">
+            <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+            <folding>
+              <marker date="1521025532423" expanded="true" signature="1242:1342" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="1257:1340" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="1484:2434" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="1499:2432" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="1530:2416" ph="&lt;table/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="1554:1773" ph="&lt;thead/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="1578:1748" ph="&lt;tr/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="1790:2395" ph="&lt;tbody/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="1814:1988" ph="&lt;tr/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="2005:2179" ph="&lt;tr/&gt;" />
+              <marker date="1521025532423" expanded="true" signature="2196:2370" ph="&lt;tr/&gt;" />
+              <marker date="1521025532423" expanded="false" signature="2502:2567" ph="..." />
+              <marker date="1521025532423" expanded="true" signature="3095:3205" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="3474:3583" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="3489:3535" ph="[...]" />
+              <marker date="1521025532423" expanded="true" signature="3550:3581" ph="[...]" />
+              <marker date="1521025532423" expanded="false" signature="4078:4171" ph="..." />
+              <marker date="1521025532423" expanded="true" signature="4201:4341" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="4216:4339" ph="{...}" />
+              <marker date="1521025532423" expanded="true" signature="4247:4322" ph="&lt;div/&gt;" />
+            </folding>
+          </first_editor>
+          <second_editor />
+>>>>>>> 628c6c9a647ffb8454dee3c70b2d2253b0d914ec
         </state>
       </provider>
     </entry>
