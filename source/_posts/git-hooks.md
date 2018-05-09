@@ -6,8 +6,6 @@ categories: git
 ---
 ![title](index.jpeg)
 
-本文主要介绍前端代码如何用`git hooks`做到自动化部署发布。
-
 <!--more-->
 ## 背景
 用`git`管理代码时，每次发布时，我们都需要经过以下步骤：
@@ -30,13 +28,13 @@ git有一个神器：[git hooks](https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%
 
 ## 环境搭建
 本例服务器环境：
-    主机：111.111.111.111
-    用户：root
+&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111
+&emsp;&emsp;&emsp;&emsp;用户：root
     
 约定（可自定义）：
-    裸仓库建在`/home/workspace`下
-    web本地仓库建在`/home/www`下
-    所属用户：git
+&emsp;&emsp;&emsp;&emsp;裸仓库建在`/home/workspace`下
+&emsp;&emsp;&emsp;&emsp;web本地仓库建在`/home/www`下
+&emsp;&emsp;&emsp;&emsp;所属用户：git
 
 ### Git服务器搭建
 1.连接至服务器
@@ -130,31 +128,31 @@ sudo chown -R git:git /home/www/layercake
 功能：
 
 1.根据不同分支进行不同操作：
-我们可以定义不同分支，当该分支push后触发对应操作，如`dev_debug`分支更新时触发测试库代码更新
+我们可以定义不同分支，当该分支push后触发对应操作，如`dev_debug`分支更新时触发测试库代码更新。
 
 2.跨服务器操作：
-当我们的web服务器代码和服务器上的本地代码位于不同服务器时，通过`scp`命令进行文件或目录的复制
+当我们的web服务器代码和服务器上的本地代码位于不同服务器时，通过`scp`命令进行文件或目录的复制。
 
 每次`scp`命令复制时，都需要输入接收服务器的密码，这不是程序猿（媛）的风格，所以我们也采用公钥配置方式来免去输入密码这一步。
 
 假如web服务器(F2)：
-    主机：222.222.222.222
-    用户：root
+&emsp;&emsp;&emsp;&emsp;主机：222.222.222.222
+&emsp;&emsp;&emsp;&emsp;用户：root
 
-本例中远程仓库(F1)：
-    主机：111.111.111.111
-    用户：git
+远程仓库(F1)：
+&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111
+&emsp;&emsp;&emsp;&emsp;用户：git
 
-`ssh`连接至F1，创建密钥
+`ssh`连接至F1，创建密钥：
 ```
 ssh git@111.111.111.111   # 连接至服务器，按提示输入密码
 
 ssh-keygen -t rsa   # 创建密钥（如F1服务器还未创建密钥），一路回车，无须设置密码
 ```
-在`.ssh`目录下会生成`id_rsa`（私钥）和 `id_rsa.pub`（公钥）两个文件，复制`id_rsa.pub`中的内容
+在`.ssh`目录下会生成`id_rsa`（私钥）和 `id_rsa.pub`（公钥）两个文件，复制`id_rsa.pub`中的内容。
 
-然后连接上F2服务器，将该内容添加至`root/.ssh/authorized_keys`中即可
-注意`root/.ssh/authorized_keys`文件权限为600
+然后连接上F2服务器，将该内容添加至`root/.ssh/authorized_keys`中即可。
+注意`root/.ssh/authorized_keys`文件权限为600。
 
 以下是本例中完整的`post-receive`配置：
 ```
@@ -225,14 +223,6 @@ do
     echo "================================================="
 done
 ```
-
-
- 
- 
-
-
-
-
 
 <footer>
 <hr/>
