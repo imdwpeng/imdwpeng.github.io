@@ -1,8 +1,8 @@
 ---
 title: 【Git】git hooks 自动化部署代码
 date: 2018-05-09 20:56:02
-tags:git
-categories:git
+tags: git
+categories: git
 ---
 ![title](index.jpeg)
 
@@ -126,8 +126,7 @@ sudo chown -R git:git /home/www/layercake
 
 到此，全部配置已完成，以后每次本地仓库`push`至远程仓库时，都会触发`post-receive`脚本，从而更新`/home/www/layercake`仓库代码。
 
-附：
-完整版`post-receive`脚本配置
+## 完整版`post-receive`脚本配置
 功能：
 
 1.根据不同分支进行不同操作：
