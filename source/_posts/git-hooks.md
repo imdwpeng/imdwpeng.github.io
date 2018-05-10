@@ -4,6 +4,9 @@ date: 2018-05-09 20:56:02
 tags: git
 categories: git
 ---
+
+本文主要介绍如何用`git hooks`来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。
+
 ![title](index.jpeg)
 
 <!--more-->

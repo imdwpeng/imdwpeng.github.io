@@ -18,6 +18,7 @@
 .pagination {
   .prev, .next, .page-number {
     @extend .page-number-basic;
+    color: #fff;
     border-bottom: 0;
     border-top: 1px solid $pagination-link-border;
     transition-property: border-color;
@@ -44,7 +45,7 @@
 
 @media (max-width: 767px)
   .pagination { border-top: none; }
-  
+
   .pagination {
     .prev, .next, .page-number {
       margin-bottom: 10px;
