@@ -120,7 +120,7 @@ sudo chown -R git:git /home/www/layercake
 ### 本地克隆仓库
 在本地电脑上，克隆服务器上的git仓库
 ```
- git clone git@114.55.67.225:/home/workspace/layercake.git
+ git clone git@111.111.111.111:/home/workspace/layercake.git
 ```
 按照提示输入服务器密码即可。
 ![hook-4](hook-4.png)
