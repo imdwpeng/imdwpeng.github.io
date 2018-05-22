@@ -200,15 +200,21 @@ DEPLOY_PATH="/home/www/layercake"
 
 # 测试库分支、测试服务器
 dev_debug="dev_debug"
-debug_path="root@222.222.222.222:/home/www"
+debug_user="root"
+debug_host="222.222.222.222"
+debug_path="${debug_user}@${debug_host}:/home/www"
 
 # 灰度分支、灰度服务器
 dev_test="dev_test"
-test_path="root@222.222.222.222:/home/www"
+test_user="root"
+test_host="222.222.222.222"
+test_path="${test_user}@${test_host}:/home/www"
 
 # 正式库分支、正式服务器
 dev_prod="master"
-prod_path="root@114.55.67.225:/home/www"
+prod_user="root"
+prod_host="222.222.222.222"
+prod_path="${prod_user}@${prod_host}:/home/www"
 
 ###### 用户配置区 结束 ######
 
@@ -237,23 +243,31 @@ do
         $dev_debug)
             envName="测试库"
             path=${debug_path}
+            user=${debug_user}
+            host=${debug_host}
             ;;
         $dev_test)
             envName="灰度"
             path=${test_path}
+            user=${test_user}
+            host=${test_host}
             ;;
          $dev_prod)
             envName="正式库"
             path=${prod_path}
+            user=${prod_user}
+            host=${prod_host}
             ;;
         *)
             echo "fail!"
             ;;
     esac
-
+    
     # 上传至测试环境、灰度、正式环境
     if [ $path != "none" ]
     then
+        ssh -o StrictHostKeyChecking=no ${user}@${host}
+        
         # -r 拷贝文件夹
         # -v 显示详情
         rsync -r -v $DEPLOY_PATH $path
