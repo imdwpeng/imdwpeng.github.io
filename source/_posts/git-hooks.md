@@ -186,7 +186,7 @@ ssh -o StrictHostKeyChecking=no root@222.222.222
 2.修改F2服务器中`/etc/ssh/ssh_config`：
 将其中的`# StrictHostKeyChecking ask`改成`StrictHostKeyChecking no`。
 
-本例采用第二种方法。
+本例采用第一种方法。
 
 以下是本例中完整的`post-receive`配置：
 
