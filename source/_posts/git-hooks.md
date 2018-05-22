@@ -63,15 +63,6 @@ git init --bare layercake.git
 ```
 ![hook-2](hook-2.png)
 
-### 创建代码仓库
-然后我们在`/home/www`下创建一个代码仓库，关联先前创建的`layercake`仓库
-```
-mkdir /home/www
-cd /home/www
-git clone /home/workspace/layercake.git
-```
-![hook-3](hook-3.png)
-
 ### 配置Git Hooks
 进入`/home/workspace/layercake.git`文件夹，使用`vi post-receive`创建一个脚本。
 ```
@@ -93,6 +84,15 @@ git pull
 ```
 chmod +x post-receive
 ```
+
+### 创建代码仓库
+然后我们在`/home/www`下创建一个代码仓库，关联先前创建的`layercake`仓库
+```
+mkdir /home/www
+cd /home/www
+git clone /home/workspace/layercake.git
+```
+![hook-3](hook-3.png)
 
 ### 配置公钥
 如不配置公钥，每次本地`push`时都会要求输入服务器密码，不胜其烦，故我们配置下公钥来跳过这一步骤。
@@ -146,16 +146,47 @@ sudo chown -R git:git /home/www/layercake
 &emsp;&emsp;&emsp;&emsp;主机：111.111.111.111
 &emsp;&emsp;&emsp;&emsp;用户：git
 
+**F1服务器操作：**
+
 `ssh`连接至F1，创建密钥：
+
 ```
 ssh git@111.111.111.111   # 连接至服务器，按提示输入密码
 
 ssh-keygen -t rsa   # 创建密钥（如F1服务器还未创建密钥），一路回车，无须设置密码
 ```
+
 在`.ssh`目录下会生成`id_rsa`（私钥）和 `id_rsa.pub`（公钥）两个文件，复制`id_rsa.pub`中的内容。
 
-然后连接上F2服务器，将该内容添加至`root/.ssh/authorized_keys`中即可。
-注意`root/.ssh/authorized_keys`文件权限为600。
+**F2服务器操作：**
+
+连接上F2服务器，将F1公钥添加至`/root/.ssh/authorized_keys`中即可。
+
+```
+ssh root@222.222.222.222  # 连接至服务器，按提示输入密码
+vi /root/.ssh/authorized_keys
+// 添加F1的公钥，保存退出
+
+chmod 600 /root/.ssh/authorized_keys  # 设置文件权限600
+```
+
+有时候连接服务器会出现以下错误：
+
+```
+Are you sure you want to continue connecting (yes/no)?
+```
+
+我们是脚本运行，所以不好去输入`yes`，解决方法有两种：
+
+ 1.在F1的`post-receive`脚本中使用`ssh -o`的参数进行设置：
+```
+ssh -o StrictHostKeyChecking=no root@222.222.222
+```
+
+2.修改F2服务器中`/etc/ssh/ssh_config`：
+将其中的`# StrictHostKeyChecking ask`改成`StrictHostKeyChecking no`。
+
+本例采用第二种方法。
 
 以下是本例中完整的`post-receive`配置：
 
@@ -165,7 +196,7 @@ ssh-keygen -t rsa   # 创建密钥（如F1服务器还未创建密钥），一�
 ###### 用户配置区 开始 ######
 
 # web服务器本地仓库目录
-DEPLOY_PATH="/home/www/layercake/"
+DEPLOY_PATH="/home/www/layercake"
 
 # 测试库分支、测试服务器
 dev_debug="dev_debug"
@@ -177,10 +208,11 @@ test_path="root@222.222.222.222:/home/www"
 
 # 正式库分支、正式服务器
 dev_prod="master"
-prod_path="root@222.222.222.222:/home/www"
+prod_path="root@114.55.67.225:/home/www"
 
 ###### 用户配置区 结束 ######
 
+path="none"
 
 # 去掉Git默认的环境变量
 unset GIT_DIR
@@ -189,9 +221,8 @@ while read oldrev newrev refname
 do
     # 当前分支
     branch=$(git rev-parse --symbolic --abbrev-ref $refname)
-    echo "================================================="
+    echo "======= start ======="
     echo "Target branch: $branch"
-
     # 指定到项目文件夹
     cd $DEPLOY_PATH
     # 创建分支（已存在会提示已存在，继续往下执行）
@@ -221,10 +252,14 @@ do
     esac
 
     # 上传至测试环境、灰度、正式环境
-    scp $DEPLOY_PATH $path
-    echo "publish to $envName..."
-
-    echo "================================================="
+    if [ $path != "none" ]
+    then
+        # -r 拷贝文件夹
+        # -v 显示详情
+        rsync -r -v $DEPLOY_PATH $path
+        echo "publish to $envName..."
+    fi
+    echo "======= end ======="
 done
 ```
 
