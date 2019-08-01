@@ -102,8 +102,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://dwpblog.site/2016/08/03/css-clear/1.png">
 <meta property="og:image" content="http://dwpblog.site/2016/08/03/css-clear/2.png">
-<meta property="og:image" content="http://dwpblog.site/2016/08/03/css-clear/footer.gif">
-<meta property="og:updated_time" content="2019-08-01T03:45:04.802Z">
+<meta property="og:updated_time" content="2019-08-01T08:37:44.888Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【css】常见的清除浮动方法">
 <meta name="twitter:description" content="当元素设置float浮动后，该元素就会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。 浮动元素会造成父元素高度塌陷，所以当我们设置float后，需进行相应的清除浮动操作。 高度塌陷的父元素（红色区域） 清除浮动后的效果">
@@ -608,7 +607,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  556
+                  566
                 </span>
               
 
@@ -652,7 +651,7 @@
 <p>原理：父元素定义overflow:hidden，此时，浏览器会自动检查浮动区域的高度；<br>优点：简单，无需增加新的标签；<br>缺点：不能和position配合使用，因为超出的尺寸的会被隐藏；</p>
 <h1 id="使用伪元素-after清除浮动"><a href="#使用伪元素-after清除浮动" class="headerlink" title="使用伪元素:after清除浮动"></a>使用伪元素:after清除浮动</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    padding: 10px;</span><br><span class="line">    background: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.parent:after&#123;</span><br><span class="line">    // 定义元素前后的生成内容，这里是定义元素后的空内容</span><br><span class="line">    content: &apos;&apos;;    </span><br><span class="line">    display: block;</span><br><span class="line">    clear: both;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child &#123;</span><br><span class="line">    float: left;</span><br><span class="line">    margin-right: 10px;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>原理：原理同方法一有点类似，在元素最后定义一个空的内容，然后让该空的内容来清除浮动；<br>优点：无需额外的标签，浏览器兼容性好，是目前用的最多的一种清除浮动的方法之一；<br>缺点：代码稍微复杂点，初学者可能不太能理解其原理；</p>
-<footer><br><hr><br><img src="/2016/08/03/css-clear/footer.gif" alt="footer"><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+<footer><br><hr><br>![footer][<a href="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]" target="_blank" rel="external">https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]</a><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
 
 
 
