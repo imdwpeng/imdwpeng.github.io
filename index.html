@@ -1,0 +1,3615 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/logo.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="每天进步一点点">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DWP&#39;s Blog">
+<meta property="og:url" content="http://dwpblog.site/index.html">
+<meta property="og:site_name" content="DWP&#39;s Blog">
+<meta property="og:description" content="每天进步一点点">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DWP&#39;s Blog">
+<meta name="twitter:description" content="每天进步一点点">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://dwpblog.site/"/>
+
+
+
+
+
+
+  <title>DWP's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+<canvas id="canvas"></canvas>
+<div class="bg-night">
+    <img src="http://dwpblog.site/images/1.png">
+</div>
+
+<script type="text/javascript">
+
+    class Moon {
+        constructor(ctx, width, height) {
+            this.ctx = ctx;
+            this.width = width;
+            this.height = height;
+            this.circle_x = width / 2;      //旋转轨迹圆心的X坐标
+            this.circle_y = width;          //旋转轨迹圆心的Y坐标
+            this.circle_r = width;          //旋转轨迹的半径
+            this.angle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2);                  //旋转轨迹的角度
+            this.startAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2 - 400);       //开始旋转的角度
+            this.endAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), width / 2 + 200);          //结束旋转的角度
+            this.x = 0;         //月亮的X坐标
+            this.y = 0;         //月亮的Y坐标
+        }
+
+        draw() {
+            let {ctx, x, y, width, height} = this;
+
+            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 400);
+            gradient.addColorStop(0, 'rgb(255,255,255)');
+            gradient.addColorStop(0.01, 'rgb(70,70,80)');
+            gradient.addColorStop(0.2, 'rgb(40,40,50)');
+            gradient.addColorStop(0.4, 'rgb(20,20,30)');
+            gradient.addColorStop(1, 'rgb(11,14,33)');
+
+            ctx.save();
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+
+        move() {
+            let {circle_x, circle_y, circle_r, angle, startAngle, endAngle,} = this;
+            this.angle = angle - 0.0001;
+
+            if (this.angle <= endAngle) {
+                this.angle = startAngle;
+            }
+
+            this.x = circle_x + (circle_r * Math.cos(angle));
+            this.y = circle_y - (circle_r * Math.sin(angle)) + 50;
+        }
+    }
+
+    class Stars {
+        constructor(ctx, width, height, amount) {
+            this.ctx = ctx
+            this.width = width
+            this.height = height
+            this.stars = this.getStars(amount)
+        }
+
+        getStars(amount) {
+            let stars = []
+            while (amount--) {
+                stars.push({
+                    x: Math.random() * this.width,
+                    y: Math.random() * this.height,
+                    r: Math.random() + 0.2
+                })
+            }
+            return stars
+        }
+
+        draw() {
+            let ctx = this.ctx
+            ctx.save()
+            ctx.fillStyle = 'white'
+            this.stars.forEach(star => {
+                ctx.beginPath()
+                ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI)
+                ctx.fill()
+            })
+            ctx.restore()
+        }
+
+        //闪烁，星星半径每隔10帧随机变大或变小
+        blink() {
+            this.stars = this.stars.map(star => {
+                let sign = Math.random() > 0.5 ? 1 : -1
+                star.r += sign * 0.2
+                if (star.r < 0) {
+                    star.r = -star.r
+                } else if (star.r > 1) {
+                    star.r -= 0.2
+                }
+                return star
+            })
+
+        }
+    }
+
+    class Meteor {
+        constructor(ctx, x, h) {
+            this.ctx = ctx;
+            this.x = x;
+            this.y = 0;
+            this.h = h;
+            this.vx = -(5 + Math.random() * 5);
+            this.vy = -this.vx;
+            this.len = Math.random() * 300 + 100;
+        }
+
+        flow() {
+            //判定流星出界
+            if (this.x < -this.len || this.y > this.h + this.len) {
+                return false
+            }
+            this.x += this.vx;
+            this.y += this.vy;
+            return true
+        }
+
+        draw() {
+            let ctx = this.ctx,
+                //径向渐变，从流星头尾圆心，半径越大，透明度越高
+                gra = ctx.createRadialGradient(
+                    this.x, this.y, 0, this.x, this.y, this.len);
+
+            const PI = Math.PI;
+            gra.addColorStop(0, 'rgba(255,255,255,1)');
+            gra.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.save();
+            ctx.fillStyle = gra;
+            ctx.beginPath();
+            //流星头，二分之一圆
+            ctx.arc(this.x, this.y, .5, PI / 4, 5 * PI / 4);
+            //绘制流星尾，三角形
+            ctx.lineTo(this.x + this.len, this.y - this.len);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    let width = window.innerWidth,
+        height = window.innerHeight,
+        canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext('2d'),
+        //实例化月亮和星星。流星是随机时间生成，所以只初始化数组
+        moon = new Moon(ctx, width, height),
+        stars = new Stars(ctx, width, height, 200),
+        meteors = [],
+        count = 0;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    //流星生成函数
+    const meteorGenerator = () => {
+        //x位置偏移，以免经过月亮
+        let x = Math.random() * width;
+        meteors.push(new Meteor(ctx, x, height));
+    }
+
+    //每一帧动画生成函数
+    const frame = () => {
+        //每隔100帧星星闪烁一次，节省计算资源
+        count++;
+        count % 100 == 0 && stars.blink();
+        count % 300 == 0 && meteorGenerator();
+
+        moon.move();
+        moon.draw();
+        stars.draw();
+
+        meteors.forEach((meteor, index, arr) => {
+            //如果流星离开视野之内，销毁流星实例，回收内存
+            if (meteor.flow()) {
+                meteor.draw()
+            } else {
+                arr.splice(index, 1)
+            }
+        });
+        requestAnimationFrame(frame);
+    };
+
+    meteorGenerator();
+    frame();
+</script>
+
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b41f87eb7451df9dce1958cacad63f25";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <a href="https://github.com/imdwpeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png"></a>
+
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DWP's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Learn and Live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ebook">
+          <a href="/ebook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            电子书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resource">
+          <a href="/resource" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
+            
+            资源
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2019/04/02/jest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/02/jest/" itemprop="url">【前端测试】基于Jest+Enzyme+React的前端测试</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-02T13:38:45+08:00">
+                2019-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端测试/" itemprop="url" rel="index">
+                    <span itemprop="name">前端测试</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2019/04/02/jest/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2019/04/02/jest/" class="cy_cmt_count" data-xid="2019/04/02/jest/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2019/04/02/jest/" class="leancloud_visitors" data-flag-title="【前端测试】基于Jest+Enzyme+React的前端测试">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,938
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="基于Jest-Enzyme-React的前端测试"><a href="#基于Jest-Enzyme-React的前端测试" class="headerlink" title="基于Jest+Enzyme+React的前端测试"></a>基于Jest+Enzyme+React的前端测试</h1><p>标签（空格分隔）： 测试</p>
+<hr>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/index.jpeg" alt="此处输入图片的描述"></p>
+<p>本文中的自动化测试指的是单元测试 （UT），所谓单元测试也就是对每个单元进行测试，通俗的将一般针对的是函数，类或单个组件，不涉及系统和集成。单元测试是软件测试的基础测试，主要是用来验证所测代码是否和程序员的期望一致。</p>
+<h3 id="什么是测试"><a href="#什么是测试" class="headerlink" title="什么是测试"></a>什么是测试</h3><p>一段检测你的应用代码（也叫“生产代码”）是否按预期执行的代码。</p>
+<h3 id="为什么要测试"><a href="#为什么要测试" class="headerlink" title="为什么要测试"></a>为什么要测试</h3><p>如果你不测试，有些潜在的bug可能会在未来的时间里一次又一次的困扰你，从部署到生产都将会是一个噩梦。</p>
+<ul>
+<li>正确性：测试可以验证代码的正确性，在上线前做到心里有底；</li>
+<li>自动化：当然手工也可以测试，通过console可以打印出内部信息，但是这是一次性的事情，下次测试还需要从头来过，效率不能得到保证。通过编写测试用例，可以做到一次编写，多次运行；</li>
+<li>解释性：测试用例用于测试接口、模块的重要性，那么在测试用例中就会涉及如何使用这些API。其他开发人员如果要使用这些API，那阅读测试用例是一种很好地途径，有时比文档说明更清晰；</li>
+<li>驱动开发，指导设计：代码被测试的前提是代码本身的可测试性，那么要保证代码的可测试性，就需要在开发中注意API的设计，TDD将测试前移就是起到这么一个作用；</li>
+<li>保证重构：互联网行业产品迭代速度很快，迭代后必然存在代码重构的过程，那怎么才能保证重构后代码的质量呢？有测试用例做后盾，就可以大胆的进行重构；</li>
+</ul>
+<h3 id="测试框架"><a href="#测试框架" class="headerlink" title="测试框架"></a>测试框架</h3><p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/1.png" alt="此处输入图片的描述"></p>
+<p><strong>Jest</strong></p>
+<ul>
+<li>基于 Jasmine 至今已经做了大量修改添加了很多特性</li>
+<li>开箱即用配置少，API简单</li>
+<li>包含单元测试运行器、断言库、Mock库</li>
+<li>互动模式选择要测试的模块</li>
+<li>基于 <code>Istanbul</code> 的内置代码覆盖率报告</li>
+<li>全局环境，比如 describe 不需要引入直接用</li>
+<li>较多用于 React 项目(但广泛支持各种项目)</li>
+</ul>
+<p><strong>Mocha</strong></p>
+<ul>
+<li>灵活(不包括断言和仿真，自己选对应工具)</li>
+<li>流行的选择：chai，sinon</li>
+<li>社区成熟用的人多，测试各种东西社区都有示例</li>
+<li>需要较多配置</li>
+<li>可以使用快照测试，但依然需要额外配置</li>
+</ul>
+<p><strong>Jasmine</strong></p>
+<ul>
+<li>开箱即用(支持断言和仿真)</li>
+<li>全局环境</li>
+<li>比较’老’,坑基本都有人踩过了</li>
+</ul>
+<h2 id="Jest"><a href="#Jest" class="headerlink" title="Jest"></a>Jest</h2><h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beforeAll</td>
+<td>在文件开始执行运行的函数</td>
+</tr>
+<tr>
+<td>afterAll</td>
+<td>在文件开始执行后运行的函数</td>
+</tr>
+<tr>
+<td>beforeEach</td>
+<td>在每个测试 <code>test</code> 执行前运行的函数</td>
+</tr>
+<tr>
+<td>afterEach</td>
+<td>在每个测试 <code>test</code> 执行后运行的函数</td>
+</tr>
+<tr>
+<td>describe</td>
+<td>测试组块，包含多个测试</td>
+</tr>
+<tr>
+<td>test</td>
+<td>测试用例，别名 <code>it</code></td>
+</tr>
+<tr>
+<td>expect</td>
+<td>执行一个断言</td>
+</tr>
+</tbody>
+</table>
+<h3 id="常见断言"><a href="#常见断言" class="headerlink" title="常见断言"></a>常见断言</h3><p>匹配器（Matchers）是 <code>Jest</code> 中非常重要的一个概念，它可以提供很多种方式来让你去验证你所测试的返回值，这里文重点介绍几种常用的 <code>Matcher</code> ，其他的可以通过 <a href="https://jestjs.io/docs/en/expect" target="_blank" rel="external">官网api文档</a> 查看。</p>
+<table>
+<thead>
+<tr>
+<th>匹配器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>toBe()</td>
+<td>等于（不能用于对象）</td>
+</tr>
+<tr>
+<td>toEqual()</td>
+<td>等于（可用于对象）</td>
+</tr>
+<tr>
+<td>not.toBe()</td>
+<td>不等于</td>
+</tr>
+<tr>
+<td>toBeNull()</td>
+<td>只匹配 <code>null</code></td>
+</tr>
+<tr>
+<td>toBeUndefined()</td>
+<td>只匹配 <code>undefined</code></td>
+</tr>
+<tr>
+<td>toBeDefined()</td>
+<td>与 <code>toBeUndefined</code> 相反</td>
+</tr>
+<tr>
+<td>toBeTruthy()</td>
+<td>匹配任何 <code>if</code> 语句为真</td>
+</tr>
+<tr>
+<td>toBeFalsy()</td>
+<td>匹配任何 <code>if</code> 语句为假</td>
+</tr>
+<tr>
+<td>toBeGreaterThan()</td>
+<td>匹配大于</td>
+</tr>
+<tr>
+<td>toBeGreaterThanOrEqual()</td>
+<td>匹配大于等于</td>
+</tr>
+<tr>
+<td>toBeLessThan()</td>
+<td>匹配小于</td>
+</tr>
+<tr>
+<td>toBeLessThanOrEqual()</td>
+<td>匹配小于等于</td>
+</tr>
+<tr>
+<td>toBeCloseTo()</td>
+<td>匹配浮点数相等</td>
+</tr>
+<tr>
+<td>toMatch()</td>
+<td>匹配字符串，支持正则匹配</td>
+</tr>
+<tr>
+<td>toContain()</td>
+<td>匹配数据包含特定子项</td>
+</tr>
+</tbody>
+</table>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><h3 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -y</span><br></pre></td></tr></table></figure>
+<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p>安装 <code>jest</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i jest -D</span><br></pre></td></tr></table></figure></p>
+<p>如用到es6语法，则还要安装 <code>Babel</code> 依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i babel-jest @babel/core @babel/preset-env -D</span><br></pre></td></tr></table></figure></p>
+<p>安装版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;@babel/core&quot;: &quot;^7.5.5&quot;,</span><br><span class="line">    &quot;@babel/preset-env&quot;: &quot;^7.5.5&quot;,</span><br><span class="line">    &quot;babel-jest&quot;: &quot;^24.8.0&quot;,</span><br><span class="line">    &quot;jest&quot;: &quot;^24.8.0&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>注：Jest 24 放弃了对 Babel 6 的支持。如果不能升级到 Babel 7 ，那么要么继续使用 Jest 23 ，要么升级到 Jest 24 ，将 <code>babel-jest</code> 锁定在版本23;</strong></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>修改 <code>package.json</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;jest --colors --coverage&quot; // coverage 测试覆盖率报告  colors 根据覆盖率生成不同颜色</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根目录新建 <code>.babelrc</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;presets&quot;: [</span><br><span class="line">        [</span><br><span class="line">            &quot;@babel/preset-env&quot;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;targets&quot;: &#123;</span><br><span class="line">                    &quot;node&quot;: &quot;current&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><p>根目录下新建文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// add.js</span><br><span class="line">const add = (a,b) =&gt; &#123;</span><br><span class="line">    return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default add;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// add.test.js</span><br><span class="line">import add from &apos;./add&apos;;</span><br><span class="line"></span><br><span class="line">describe(&apos;Test Add&apos;,()=&gt;&#123;</span><br><span class="line">    it(&apos;add 1 and 2 should equal 3&apos;,()=&gt;&#123;</span><br><span class="line">        expect(add(1,2)).toEqual(3);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>终端执行命令 <code>npm run test</code><br><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/result_1.png" alt="此处输入图片的描述"></p>
+<h2 id="Enzyme"><a href="#Enzyme" class="headerlink" title="Enzyme"></a>Enzyme</h2><p><a href="https://airbnb.io/enzyme/" target="_blank" rel="external">enzyme</a> 是 <code>Airbnb</code> 开源的 <code>react</code> 测试类库，提供了一套简洁强大的 API，着重于渲染 <code>react</code> 组件和 <code>DOM</code> 节点处理，开发体验十分友好；</p>
+<h3 id="渲染组件方法"><a href="#渲染组件方法" class="headerlink" title="渲染组件方法"></a>渲染组件方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>shallow</td>
+<td>浅层渲染，渲染至虚拟DOM，之渲染当前组件，只能对当前组件进行断言</td>
+</tr>
+<tr>
+<td>mount</td>
+<td>渲染真实DOM节点，渲染当前节点及其所有子节点，用于DOM API的交互或测试组件的生命周期等</td>
+</tr>
+<tr>
+<td>render</td>
+<td>渲染html，用于分析html结构</td>
+</tr>
+</tbody>
+</table>
+<h3 id="常见api"><a href="#常见api" class="headerlink" title="常见api"></a>常见api</h3><table>
+<thead>
+<tr>
+<th>api</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>find</td>
+<td>通过匹配选择器来检索节点</td>
+</tr>
+<tr>
+<td>at(index)</td>
+<td>返回指定位置的子组件</td>
+</tr>
+<tr>
+<td>get(index)</td>
+<td>返回指定位置的DOM节点</td>
+</tr>
+<tr>
+<td>first</td>
+<td>返回第一个子组件</td>
+</tr>
+<tr>
+<td>last</td>
+<td>返回最后一个子组件</td>
+</tr>
+<tr>
+<td>props</td>
+<td>返回组件的所有属性</td>
+</tr>
+<tr>
+<td>prop(key)</td>
+<td>返回组件指定属性</td>
+</tr>
+<tr>
+<td>state(key)</td>
+<td>返回组件指定状态</td>
+</tr>
+<tr>
+<td>setProps(nextProps)</td>
+<td>设置组件属性</td>
+</tr>
+<tr>
+<td>setState(nextState)</td>
+<td>设置组件状态</td>
+</tr>
+</tbody>
+</table>
+<h2 id="React-Jest-Enzyme"><a href="#React-Jest-Enzyme" class="headerlink" title="React + Jest + Enzyme"></a>React + Jest + Enzyme</h2><p>首先配置好 <code>React16</code>+ <code>Webpack4</code> 环境，提供一个参考环境 <a href="https://github.com/imdwpeng/webpack-config" target="_blank" rel="external">Webpack+React配置</a> ，这里不再展开介绍；</p>
+<h3 id="安装和配置"><a href="#安装和配置" class="headerlink" title="安装和配置"></a>安装和配置</h3><p>安装 <code>Enzyme</code><br>需要根据使用的 <code>React</code> 版本来安装 <code>enzyme-adapter-react</code>，这里使用的是 React 16版，对应 <code>enzyme-adapter-react-16</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i enzyme enzyme-adapter-react-16 -D</span><br></pre></td></tr></table></figure></p>
+<p>配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// .babelrc</span><br><span class="line">&#123;</span><br><span class="line">    &quot;presets&quot;: [</span><br><span class="line">        [</span><br><span class="line">            &quot;@babel/preset-env&quot;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;targets&quot;: &#123;</span><br><span class="line">                    &quot;node&quot;: &quot;current&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;@babel/preset-react&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;plugins&quot;: [</span><br><span class="line">        &quot;@babel/plugin-proposal-class-properties&quot;,</span><br><span class="line">        &quot;@babel/plugin-syntax-dynamic-import&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// jest.setup.js</span><br><span class="line">import &#123; configure &#125; from &apos;enzyme&apos;;</span><br><span class="line">import Adapter from &apos;enzyme-adapter-react-16&apos;;</span><br><span class="line">// 注册enzyme</span><br><span class="line">configure(&#123; adapter: new Adapter() &#125;);</span><br></pre></td></tr></table></figure>
+<p><code>jest</code> 配置，更多配置见<a href="https://jestjs.io/docs/en/configuration" target="_blank" rel="external">官网文档</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// jest.config.js</span><br><span class="line">module.exports = &#123;</span><br><span class="line">  setupFiles: [&apos;&lt;rootDir&gt;/jest.setup.js&apos;], // 运行测试前可执行的脚本</span><br><span class="line">  transform: &#123;</span><br><span class="line">    &apos;^.+\\.(js|jsx|mjs)$&apos;: &apos;&lt;rootDir&gt;/node_modules/babel-jest&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  testMatch: [  // 测试文件的路径</span><br><span class="line">    &apos;&lt;rootDir&gt;/src/**/__tests__/**/*.&#123;js,jsx,mjs&#125;&apos;</span><br><span class="line">  ],</span><br><span class="line">  transformIgnorePatterns: [&apos;&lt;rootDir&gt;/node_modules/&apos;]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="测试用例-1"><a href="#测试用例-1" class="headerlink" title="测试用例"></a>测试用例</h3><p>新建一个 <code>Input</code> 组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// src/Input.js</span><br><span class="line">import React, &#123; Component &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">class Input extends Component &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    super();</span><br><span class="line">    this.state = &#123;</span><br><span class="line">      value: &apos;&apos;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleChange = (e) =&gt; &#123;</span><br><span class="line">    this.setState(&#123;</span><br><span class="line">      value: e.target.value</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    const &#123; value &#125; = this.state;</span><br><span class="line"></span><br><span class="line">    return (</span><br><span class="line">      &lt;input</span><br><span class="line">        type=&quot;text&quot;</span><br><span class="line">        value=&#123;value&#125;</span><br><span class="line">        onChange=&#123;this.handleChange&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default Input;</span><br></pre></td></tr></table></figure></p>
+<p>新建对应测试用例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// src/__test__/Input.test.js</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; shallow &#125; from &apos;enzyme&apos;;</span><br><span class="line">import Input from &apos;../Input&apos;;</span><br><span class="line"></span><br><span class="line">describe(&apos;Input&apos;, () =&gt; &#123;</span><br><span class="line">  it(&apos;render component&apos;, () =&gt; &#123;</span><br><span class="line">    const wrapper = shallow(&lt;Input /&gt;);</span><br><span class="line">    expect(wrapper.type()).toEqual(&apos;input&apos;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  it(&apos;value change&apos;, () =&gt; &#123;</span><br><span class="line">    const wrapper = shallow(&lt;Input /&gt;);</span><br><span class="line">    expect(wrapper.state(&apos;value&apos;)).toEqual(&apos;&apos;);</span><br><span class="line">    wrapper.simulate(&apos;change&apos;, &#123; target: &#123; value: &apos;lisi&apos; &#125; &#125;);</span><br><span class="line">    expect(wrapper.state(&apos;value&apos;)).toEqual(&apos;lisi&apos;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>这里定义了2个测试内容</p>
+<ul>
+<li>测试组件渲染</li>
+<li>测试触发事件方法 <code>onChange</code></li>
+</ul>
+<p>终端执行命令 <code>npm run test</code><br><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/result_2.png" alt="此处输入图片的描述"></p>
+<footer><br><hr><br>![footer][<a href="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]" target="_blank" rel="external">https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]</a><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2018/05/09/git-hooks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/09/git-hooks/" itemprop="url">【Git】git hooks 自动化部署代码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-09T20:56:02+08:00">
+                2018-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/05/09/git-hooks/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2018/05/09/git-hooks/" class="cy_cmt_count" data-xid="2018/05/09/git-hooks/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/05/09/git-hooks/" class="leancloud_visitors" data-flag-title="【Git】git hooks 自动化部署代码">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,025
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本文主要介绍如何用<code>git hooks</code>来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。</p>
+<p><img src="/2018/05/09/git-hooks/index.jpeg" alt="title"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/09/git-hooks/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2018/03/12/travis-ci/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/12/travis-ci/" itemprop="url">【Git】持续集成之Travis CI自动化部署</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-12T11:39:15+08:00">
+                2018-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/github/" itemprop="url" rel="index">
+                    <span itemprop="name">github</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/03/12/travis-ci/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2018/03/12/travis-ci/" class="cy_cmt_count" data-xid="2018/03/12/travis-ci/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/03/12/travis-ci/" class="leancloud_visitors" data-flag-title="【Git】持续集成之Travis CI自动化部署">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,109
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2018/03/12/travis-ci/index.jpeg" alt="title"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/12/travis-ci/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/12/09/throttleDebounce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/09/throttleDebounce/" itemprop="url">【JS】JavaScript节流和防抖</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T20:53:40+08:00">
+                2017-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/12/09/throttleDebounce/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/12/09/throttleDebounce/" class="cy_cmt_count" data-xid="2017/12/09/throttleDebounce/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/12/09/throttleDebounce/" class="leancloud_visitors" data-flag-title="【JS】JavaScript节流和防抖">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  526
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2017/12/09/throttleDebounce/index.jpeg" alt="title"><br>针对一些会频繁触发的事件如<code>scroll</code>、<code>resize</code>，如果正常绑定事件处理函数的话，有可能在很短的时间内多次连续触发事件，十分影响性能。<br>因此针对这类事件要进行防抖动或者节流处理。</p>
+<p>节流：允许一个函数在规定的时间内只执行一次；<br>防抖：如果一定时间内没有触发执行条件才执行一次；<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/12/09/throttleDebounce/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/11/01/cross-domain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/01/cross-domain/" itemprop="url">【JS】常见的前端跨域方案集锦</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T22:23:41+08:00">
+                2017-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/11/01/cross-domain/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/11/01/cross-domain/" class="cy_cmt_count" data-xid="2017/11/01/cross-domain/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/11/01/cross-domain/" class="leancloud_visitors" data-flag-title="【JS】常见的前端跨域方案集锦">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  3,152
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2017/11/01/cross-domain/index.jpeg" alt="cross-domain"><br>浏览器在请求不同域的资源时，会因为同源策略的影响请求不成功，这就是通常被提到的“跨域问题”。作为前端开发，解决跨域问题应该是一个被熟练掌握的技能。而随着技术不断的更迭，针对跨域问题的解决也衍生出了多种解决方案。我们通常会根据项目的不同需要，而采取不同的方式。这篇文章，将详细总结跨域问题的相关知识点，以便在遇到相同问题的时候，能有一个清晰的解决思路。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/01/cross-domain/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/10/05/closure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/05/closure/" itemprop="url">【JS】菜鸟学闭包</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T19:21:54+08:00">
+                2017-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/05/closure/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/10/05/closure/" class="cy_cmt_count" data-xid="2017/10/05/closure/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/05/closure/" class="leancloud_visitors" data-flag-title="【JS】菜鸟学闭包">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,866
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2017/10/05/closure/index.jpeg" alt="closure"><br>相信学习前端的小伙伴们，对这个词应该并不陌生吧，闭包（closure）是JS的一个重点和难点。<br>本文主要是想和大家一起来简单归纳一下闭包的相关知识。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/05/closure/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/09/16/git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/16/git/" itemprop="url">Git 学习手扎</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T03:49:22+08:00">
+                2017-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/09/16/git/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/09/16/git/" class="cy_cmt_count" data-xid="2017/09/16/git/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/09/16/git/" class="leancloud_visitors" data-flag-title="Git 学习手扎">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,227
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2017/09/16/git/1.jpeg" alt="git"><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/16/git/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/08/16/css-bfc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/16/css-bfc/" itemprop="url">【CSS】BFC原理及应用解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-16T14:34:16+08:00">
+                2017-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/08/16/css-bfc/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/08/16/css-bfc/" class="cy_cmt_count" data-xid="2017/08/16/css-bfc/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/08/16/css-bfc/" class="leancloud_visitors" data-flag-title="【CSS】BFC原理及应用解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  843
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2017/08/16/css-bfc/index.jpeg" alt="css-bfc"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/08/16/css-bfc/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/06/18/react/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/18/react/" itemprop="url">React学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T13:06:54+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/06/18/react/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/06/18/react/" class="cy_cmt_count" data-xid="2017/06/18/react/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/06/18/react/" class="leancloud_visitors" data-flag-title="React学习">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  5,595
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  23
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img class="react-img" src="/2017/06/18/react/logo.png"><br>React 是一个用于构建用户界面的 JAVASCRIPT 库。<br>React主要用于构建UI，很多人认为 React 是 MVC 中的 V（视图）。<br>React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。<br>React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/18/react/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/06/16/JSDesignPatterns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/16/JSDesignPatterns/" itemprop="url">JavaScript设计模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T21:45:23+08:00">
+                2017-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/06/16/JSDesignPatterns/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/06/16/JSDesignPatterns/" class="cy_cmt_count" data-xid="2017/06/16/JSDesignPatterns/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/06/16/JSDesignPatterns/" class="leancloud_visitors" data-flag-title="JavaScript设计模式">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  4,376
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>每个JS开发者都力求写出可维护、复用性和可读性高的代码。随着应用不断扩大，代码组织的合理性也越来越重要。设计模式为特定环境下的常见问题提供了一个组织结构，对于克服这些挑战起到至关重要的作用。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/16/JSDesignPatterns/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/06/04/hexo-github/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/04/hexo-github/" itemprop="url">hexo + github 免费搭建自己的博客</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-04T11:19:24+08:00">
+                2017-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/06/04/hexo-github/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2017/06/04/hexo-github/" class="cy_cmt_count" data-xid="2017/06/04/hexo-github/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/06/04/hexo-github/" class="leancloud_visitors" data-flag-title="hexo + github 免费搭建自己的博客">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,649
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="http://o71mbfad2.bkt.clouddn.com/07_hexo-blog-basic1_80.jpg" alt="hexo"></p>
+<p>本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/04/hexo-github/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2016/08/03/css-clear/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/08/03/css-clear/" itemprop="url">【css】常见的清除浮动方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-03T22:17:00+08:00">
+                2016-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2016/08/03/css-clear/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2016/08/03/css-clear/" class="cy_cmt_count" data-xid="2016/08/03/css-clear/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2016/08/03/css-clear/" class="leancloud_visitors" data-flag-title="【css】常见的清除浮动方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  556
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>当元素设置float浮动后，该元素就会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。</p>
+<p>浮动元素会造成父元素高度塌陷，所以当我们设置float后，需进行相应的清除浮动操作。<br><img src="/2016/08/03/css-clear/1.png" alt="未清除浮动"></p>
+<p><div style="text-align:center;">高度塌陷的父元素（红色区域）</div><br><img src="/2016/08/03/css-clear/2.png" alt="清除浮动"></p>
+<p><div style="text-align:center;">清除浮动后的效果</div><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/08/03/css-clear/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2016/07/25/css-layout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/07/25/css-layout/" itemprop="url">【css】常见布局方案归纳</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-25T21:16:01+08:00">
+                2016-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2016/07/25/css-layout/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://dwpblog.site/2016/07/25/css-layout/" class="cy_cmt_count" data-xid="2016/07/25/css-layout/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2016/07/25/css-layout/" class="leancloud_visitors" data-flag-title="【css】常见布局方案归纳">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,593
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2016/07/25/css-layout/index.jpg" alt="css布局"></p>
+<p>布局（layout）即对事物的全面规划和安排，页面布局是对页面的文字、图像或表格进行格式化版式排列。网页布局对改善网站的外观非常重要，又称版式布局。<br>常见的布局结构分为：单列布局，两列布局，三列布局和混合布局，其中使用最多的是混合布局，即按照网站的实际需求使用多列进行布局。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/07/25/css-layout/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="DWP" />
+          <p class="site-author-name" itemprop="name">DWP</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天进步一点点</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/imdwpeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DWP</span>
+</div>
+
+<i class="fa fa-user"></i>
+总访问量: <span id="busuanzi_value_site_pv"></span> 次
+|
+<i class="fa fa-eye"></i>
+访客数: <span id="busuanzi_value_site_uv"></span> 人
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+
+  
+  
+
+  
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytu1wwGI"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("lH50ty9R4pTxi9aOKCv2tYWw-gzGzoHsz", "p6Gd5EcinxeGddql9jVCbk6u");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>

@@ -1,0 +1,1234 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/logo.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="每个JS开发者都力求写出可维护、复用性和可读性高的代码。随着应用不断扩大，代码组织的合理性也越来越重要。设计模式为特定环境下的常见问题提供了一个组织结构，对于克服这些挑战起到至关重要的作用。">
+<meta name="keywords" content="js,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript设计模式">
+<meta property="og:url" content="http://dwpblog.site/2017/06/16/JSDesignPatterns/index.html">
+<meta property="og:site_name" content="DWP&#39;s Blog">
+<meta property="og:description" content="每个JS开发者都力求写出可维护、复用性和可读性高的代码。随着应用不断扩大，代码组织的合理性也越来越重要。设计模式为特定环境下的常见问题提供了一个组织结构，对于克服这些挑战起到至关重要的作用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://dwpblog.site/2017/06/16/JSDesignPatterns/footer.gif">
+<meta property="og:updated_time" content="2019-08-01T03:45:04.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript设计模式">
+<meta name="twitter:description" content="每个JS开发者都力求写出可维护、复用性和可读性高的代码。随着应用不断扩大，代码组织的合理性也越来越重要。设计模式为特定环境下的常见问题提供了一个组织结构，对于克服这些挑战起到至关重要的作用。">
+<meta name="twitter:image" content="http://dwpblog.site/2017/06/16/JSDesignPatterns/footer.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://dwpblog.site/2017/06/16/JSDesignPatterns/"/>
+
+
+
+
+
+
+  <title>JavaScript设计模式 | DWP's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+<canvas id="canvas"></canvas>
+<div class="bg-night">
+    <img src="http://dwpblog.site/images/1.png">
+</div>
+
+<script type="text/javascript">
+
+    class Moon {
+        constructor(ctx, width, height) {
+            this.ctx = ctx;
+            this.width = width;
+            this.height = height;
+            this.circle_x = width / 2;      //旋转轨迹圆心的X坐标
+            this.circle_y = width;          //旋转轨迹圆心的Y坐标
+            this.circle_r = width;          //旋转轨迹的半径
+            this.angle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2);                  //旋转轨迹的角度
+            this.startAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2 - 400);       //开始旋转的角度
+            this.endAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), width / 2 + 200);          //结束旋转的角度
+            this.x = 0;         //月亮的X坐标
+            this.y = 0;         //月亮的Y坐标
+        }
+
+        draw() {
+            let {ctx, x, y, width, height} = this;
+
+            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 400);
+            gradient.addColorStop(0, 'rgb(255,255,255)');
+            gradient.addColorStop(0.01, 'rgb(70,70,80)');
+            gradient.addColorStop(0.2, 'rgb(40,40,50)');
+            gradient.addColorStop(0.4, 'rgb(20,20,30)');
+            gradient.addColorStop(1, 'rgb(11,14,33)');
+
+            ctx.save();
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+
+        move() {
+            let {circle_x, circle_y, circle_r, angle, startAngle, endAngle,} = this;
+            this.angle = angle - 0.0001;
+
+            if (this.angle <= endAngle) {
+                this.angle = startAngle;
+            }
+
+            this.x = circle_x + (circle_r * Math.cos(angle));
+            this.y = circle_y - (circle_r * Math.sin(angle)) + 50;
+        }
+    }
+
+    class Stars {
+        constructor(ctx, width, height, amount) {
+            this.ctx = ctx
+            this.width = width
+            this.height = height
+            this.stars = this.getStars(amount)
+        }
+
+        getStars(amount) {
+            let stars = []
+            while (amount--) {
+                stars.push({
+                    x: Math.random() * this.width,
+                    y: Math.random() * this.height,
+                    r: Math.random() + 0.2
+                })
+            }
+            return stars
+        }
+
+        draw() {
+            let ctx = this.ctx
+            ctx.save()
+            ctx.fillStyle = 'white'
+            this.stars.forEach(star => {
+                ctx.beginPath()
+                ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI)
+                ctx.fill()
+            })
+            ctx.restore()
+        }
+
+        //闪烁，星星半径每隔10帧随机变大或变小
+        blink() {
+            this.stars = this.stars.map(star => {
+                let sign = Math.random() > 0.5 ? 1 : -1
+                star.r += sign * 0.2
+                if (star.r < 0) {
+                    star.r = -star.r
+                } else if (star.r > 1) {
+                    star.r -= 0.2
+                }
+                return star
+            })
+
+        }
+    }
+
+    class Meteor {
+        constructor(ctx, x, h) {
+            this.ctx = ctx;
+            this.x = x;
+            this.y = 0;
+            this.h = h;
+            this.vx = -(5 + Math.random() * 5);
+            this.vy = -this.vx;
+            this.len = Math.random() * 300 + 100;
+        }
+
+        flow() {
+            //判定流星出界
+            if (this.x < -this.len || this.y > this.h + this.len) {
+                return false
+            }
+            this.x += this.vx;
+            this.y += this.vy;
+            return true
+        }
+
+        draw() {
+            let ctx = this.ctx,
+                //径向渐变，从流星头尾圆心，半径越大，透明度越高
+                gra = ctx.createRadialGradient(
+                    this.x, this.y, 0, this.x, this.y, this.len);
+
+            const PI = Math.PI;
+            gra.addColorStop(0, 'rgba(255,255,255,1)');
+            gra.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.save();
+            ctx.fillStyle = gra;
+            ctx.beginPath();
+            //流星头，二分之一圆
+            ctx.arc(this.x, this.y, .5, PI / 4, 5 * PI / 4);
+            //绘制流星尾，三角形
+            ctx.lineTo(this.x + this.len, this.y - this.len);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    let width = window.innerWidth,
+        height = window.innerHeight,
+        canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext('2d'),
+        //实例化月亮和星星。流星是随机时间生成，所以只初始化数组
+        moon = new Moon(ctx, width, height),
+        stars = new Stars(ctx, width, height, 200),
+        meteors = [],
+        count = 0;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    //流星生成函数
+    const meteorGenerator = () => {
+        //x位置偏移，以免经过月亮
+        let x = Math.random() * width;
+        meteors.push(new Meteor(ctx, x, height));
+    }
+
+    //每一帧动画生成函数
+    const frame = () => {
+        //每隔100帧星星闪烁一次，节省计算资源
+        count++;
+        count % 100 == 0 && stars.blink();
+        count % 300 == 0 && meteorGenerator();
+
+        moon.move();
+        moon.draw();
+        stars.draw();
+
+        meteors.forEach((meteor, index, arr) => {
+            //如果流星离开视野之内，销毁流星实例，回收内存
+            if (meteor.flow()) {
+                meteor.draw()
+            } else {
+                arr.splice(index, 1)
+            }
+        });
+        requestAnimationFrame(frame);
+    };
+
+    meteorGenerator();
+    frame();
+</script>
+
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b41f87eb7451df9dce1958cacad63f25";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <a href="https://github.com/imdwpeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png"></a>
+
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DWP's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Learn and Live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ebook">
+          <a href="/ebook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            电子书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resource">
+          <a href="/resource" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
+            
+            资源
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/06/16/JSDesignPatterns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript设计模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T21:45:23+08:00">
+                2017-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/06/16/JSDesignPatterns/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/06/16/JSDesignPatterns/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/06/16/JSDesignPatterns/" class="leancloud_visitors" data-flag-title="JavaScript设计模式">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  4,376
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>每个JS开发者都力求写出可维护、复用性和可读性高的代码。随着应用不断扩大，代码组织的合理性也越来越重要。设计模式为特定环境下的常见问题提供了一个组织结构，对于克服这些挑战起到至关重要的作用。<br><a id="more"></a></p>
+<h2 id="单体（Singleton）模式"><a href="#单体（Singleton）模式" class="headerlink" title="单体（Singleton）模式"></a>单体（Singleton）模式</h2><p><strong>——用来划分命名空间并将一批属性和方法组织在一起的对象，如果它可以被实例化，那么它只能被实例化一次</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单体模式</span></span><br><span class="line"><span class="keyword">var</span> Singleton = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.instance = <span class="literal">null</span>;</span><br><span class="line">&#125;;</span><br><span class="line">Singleton.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取实例对象</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//只实例化一次</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.instance) &#123;</span><br><span class="line">        <span class="keyword">this</span>.instance = <span class="keyword">new</span> Singleton(name);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试单体模式的实例</span></span><br><span class="line"><span class="keyword">var</span> a = getInstance(<span class="string">"aa"</span>);</span><br><span class="line"><span class="keyword">var</span> b = getInstance(<span class="string">"bb"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a === b);   <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(a.getName());   <span class="comment">// aa</span></span><br><span class="line"><span class="built_in">console</span>.log(b.getName());   <span class="comment">// aa</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>优点</strong></p>
+<ul>
+<li>可以用来划分命名空间，减少全局变量的数量。</li>
+<li>使用单体模式可以使代码组织的更为一致，使代码容易阅读和维护。</li>
+<li>可以被实例化，且实例化一次。</li>
+</ul>
+<hr>
+<h2 id="工厂（Factory）模式"><a href="#工厂（Factory）模式" class="headerlink" title="工厂（Factory）模式"></a>工厂（Factory）模式</h2><p><strong>——提供一个创建一系列相关或相互依赖对象的接口，而无需指定他们具体的类</strong><br>工厂就是把成员对象的创建工作转交给一个外部对象，好处在于消除对象之间的耦合(何为耦合？就是相互影响)。通过使用<code>工厂方法</code>而不是new关键字及具体类，<strong>可以把所有实例化的代码都集中在一个位置</strong>，有助于创建模块化的代码，这才是工厂模式的目的和优势。<br>工厂模式分为简单工厂模式和抽象工厂模式。</p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>另外使用一个类（通常是一个单体）来生成实例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = &#123;&#125;;</span><br><span class="line">m.action = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'dog'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//外部对象创建成员对象</span></span><br><span class="line"><span class="keyword">var</span> demo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">    m.action();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用</span></span><br><span class="line">demo();</span><br></pre></td></tr></table></figure></p>
+<p>这种模式把成员对象的创建工作转交给一个外部对象。这个外部对象可以像本例中一样是一个简单的命名空间，也可以是一个类的实例。<br><strong>优点</strong>：能解决多个相似的问题。<br><strong>缺点</strong>：不能知道对象识别的问题(对象的类型不知道)。<br>如以下例子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CreatePerson</span>(<span class="params">name,age,sex</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">    obj.name = name;</span><br><span class="line">    obj.age = age;</span><br><span class="line">    obj.sex = sex;</span><br><span class="line">    obj.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> p1 = <span class="keyword">new</span> CreatePerson(<span class="string">"longen"</span>,<span class="string">'28'</span>,<span class="string">'男'</span>);</span><br><span class="line"><span class="keyword">var</span> p2 = <span class="keyword">new</span> CreatePerson(<span class="string">"tugenhua"</span>,<span class="string">'27'</span>,<span class="string">'女'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(p1.name); <span class="comment">// longen</span></span><br><span class="line"><span class="built_in">console</span>.log(p1.age);  <span class="comment">// 28</span></span><br><span class="line"><span class="built_in">console</span>.log(p1.sex);  <span class="comment">// 男</span></span><br><span class="line"><span class="built_in">console</span>.log(p1.sayName()); <span class="comment">// longen</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p2.name);  <span class="comment">// tugenhua</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.age);   <span class="comment">// 27</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.sex);   <span class="comment">// 女</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.sayName()); <span class="comment">// tugenhua</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回都是object 无法识别对象的类型 不知道他们是哪个对象的实列</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> p1);  <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> p2);  <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(p1 <span class="keyword">instanceof</span> <span class="built_in">Object</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>先设计一个抽象类，这个类不能被实例化，只能用来派生子类，最后通过对子类的扩展实现工厂方法。<br>父类只对创建过程中的一般性问题进行处理，这些处理会被子类继承，子类之间是相互独立的，具体的业务逻辑会放在子类中进行编写。<br>父类就变成了一个抽象类，但是父类可以执行子类中相同类似的方法，具体的业务逻辑需要放在子类中去实现。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">f.prototype = &#123;</span><br><span class="line">    c: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'can\'t use this method'</span>);<span class="comment">//如果调用此方法会报错，因为它是用来派生子类不能实例化</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> e = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    f.call(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line">e.prototype = <span class="keyword">new</span> f();</span><br><span class="line">e.prototype.constructor = e;</span><br><span class="line">e.prototype.c = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'this method is redefine'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="keyword">var</span> demo = <span class="keyword">new</span> e();</span><br><span class="line">demo.c();</span><br></pre></td></tr></table></figure></p>
+<p>下面来看一个例子，比如我现在开几个自行车店，那么每个店都有几种型号的自行车出售。我们现在来使用工厂模式来编写这些代码;<br>父类的构造函数如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义自行车的构造函数</span></span><br><span class="line"><span class="keyword">var</span> BicycleShop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">BicycleShop.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: BicycleShop,</span><br><span class="line">    /*</span><br><span class="line">    * 买自行车这个方法</span><br><span class="line">    * @param &#123;model&#125; 自行车型号</span><br><span class="line">    *<span class="regexp">/</span></span><br><span class="line"><span class="regexp">    sellBicycle: function(model)&#123;</span></span><br><span class="line"><span class="regexp">        var bicycle = this.createBicycle(mode);</span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 执行A业务逻辑</span></span><br><span class="line"><span class="regexp">        bicycle.A();</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 执行B业务逻辑</span></span><br><span class="line"><span class="regexp">        bicycle.B();</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        return bicycle;</span></span><br><span class="line"><span class="regexp">    &#125;,</span></span><br><span class="line"><span class="regexp">    createBicycle: function(model)&#123;</span></span><br><span class="line"><span class="regexp">        throw new Error("父类是抽象类不能直接调用，需要子类重写该方法");</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br></pre></td></tr></table></figure></p>
+<p>上面是定义一个自行车抽象类来编写工厂模式的实列，定义了createBicycle这个方法，但是如果直接实例化父类，调用父类中的这个createBicycle方法,会抛出一个error，因为父类是一个抽象类，他不能被实列化，只能通过子类来实现这个方法，实现自己的业务逻辑，下面我们来定义子类，我们学会如何使用工厂模式重新编写这个方法，首先我们需要继承父类中的成员，然后编写子类；对上述代码进行改写如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义自行车的构造函数</span></span><br><span class="line"><span class="keyword">var</span> BicycleShop = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.method = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">BicycleShop.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: BicycleShop,</span><br><span class="line">    /*</span><br><span class="line">    * 买自行车这个方法</span><br><span class="line">    * @param &#123;model&#125; 自行车型号</span><br><span class="line">    *<span class="regexp">/</span></span><br><span class="line"><span class="regexp">    sellBicycle: function(model)&#123;</span></span><br><span class="line"><span class="regexp">            var bicycle = this.createBicycle(model);</span></span><br><span class="line"><span class="regexp">            /</span><span class="regexp">/ 执行A业务逻辑</span></span><br><span class="line"><span class="regexp">            bicycle.A();</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">            /</span><span class="regexp">/ 执行B业务逻辑</span></span><br><span class="line"><span class="regexp">            bicycle.B();</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">            return bicycle;</span></span><br><span class="line"><span class="regexp">        &#125;,</span></span><br><span class="line"><span class="regexp">        createBicycle: function(model)&#123;</span></span><br><span class="line"><span class="regexp">            throw new Error("父类是抽象类不能直接调用，需要子类重写该方法");</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    &#125;;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 实现原型继承</span></span><br><span class="line"><span class="regexp">    function extend(Sub,Sup) &#123;</span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/Sub表示子类，Sup表示超类</span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 首先定义一个空函数</span></span><br><span class="line"><span class="regexp">        var F = function()&#123;&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 设置空函数的原型为超类的原型</span></span><br><span class="line"><span class="regexp">        F.prototype = Sup.prototype; </span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 实例化空函数，并把超类原型引用传递给子类</span></span><br><span class="line"><span class="regexp">        Sub.prototype = new F();</span></span><br><span class="line"><span class="regexp">                </span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 重置子类原型的构造器为子类自身</span></span><br><span class="line"><span class="regexp">        Sub.prototype.constructor = Sub;</span></span><br><span class="line"><span class="regexp">                </span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 在子类中保存超类的原型,避免子类与超类耦合</span></span><br><span class="line"><span class="regexp">        Sub.sup = Sup.prototype;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        if(Sup.prototype.constructor === Object.prototype.constructor) &#123;</span></span><br><span class="line"><span class="regexp">            /</span><span class="regexp">/ 检测超类原型的构造器是否为原型自身</span></span><br><span class="line"><span class="regexp">            Sup.prototype.constructor = Sup;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">    var BicycleChild = function(name)&#123;</span></span><br><span class="line"><span class="regexp">        this.name = name;</span></span><br><span class="line"><span class="regexp">        /</span><span class="regexp">/ 继承构造函数父类中的属性和方法</span></span><br><span class="line"><span class="regexp">        BicycleShop.call(this,name);</span></span><br><span class="line"><span class="regexp">    &#125;;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 子类继承父类原型方法</span></span><br><span class="line"><span class="regexp">    extend(BicycleChild,BicycleShop);</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ BicycleChild 子类重写父类的方法</span></span><br><span class="line"><span class="regexp">BicycleChild.prototype.createBicycle = function()&#123;</span></span><br><span class="line"><span class="regexp">    var A = function()&#123;</span></span><br><span class="line"><span class="regexp">        console.log("执行A业务操作");    </span></span><br><span class="line"><span class="regexp">    &#125;;</span></span><br><span class="line"><span class="regexp">    var B = function()&#123;</span></span><br><span class="line"><span class="regexp">        console.log("执行B业务操作");</span></span><br><span class="line"><span class="regexp">    &#125;;</span></span><br><span class="line"><span class="regexp">    return &#123;</span></span><br><span class="line"><span class="regexp">        A: A,</span></span><br><span class="line"><span class="regexp">        B: B</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">var childClass = new BicycleChild("龙恩");</span></span><br><span class="line"><span class="regexp">console.log(childClass.name);  /</span><span class="regexp">/ 龙恩</span></span><br><span class="line"><span class="regexp">childClass.sellBicycle("mode"); /</span><span class="regexp">/ 打印出  执行A业务操作和执行B业务操作</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>优点</strong></p>
+<ul>
+<li>弱化对象间的耦合，防止代码的重复。在一个方法中进行类的实例化，可以消除重复性的代码。</li>
+<li>重复性的代码可以放在父类去编写，子类继承于父类的所有成员属性和方法，子类只专注于实现自己的业务逻辑。</li>
+</ul>
+<hr>
+<h2 id="桥接（bridge）模式"><a href="#桥接（bridge）模式" class="headerlink" title="桥接（bridge）模式"></a>桥接（bridge）模式</h2><p><em>——将抽象部分与它的实现部分分离，使它们都可以独立地变化。</em><br>桥接模式最常见和实际的应用场合之一是事件监听器回调函数。<br>先看一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">addEvent(element, <span class="string">'click'</span>, getBeerById);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getBeerById</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> id = <span class="keyword">this</span>.id;</span><br><span class="line">	asyncRequest(<span class="string">'GET'</span>, <span class="string">'beer.uri?id='</span> + id, <span class="function"><span class="keyword">function</span>(<span class="params">resp</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// Callback response.</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'Requested Beer: '</span> + resp.responseText);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述代码，有个问题就是getBeerById必须要有浏览器的上下文才能使用，因为其内部使用了this.id这个属性，如果没用上下文，那就歇菜了。所以说一般稍微有经验的程序员都会将程序改造成如下形式：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getBeerById</span>(<span class="params">id, callback</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 通过ID发送请求，然后返回数据</span></span><br><span class="line">	asyncRequest(<span class="string">'GET'</span>, <span class="string">'beer.uri?id='</span> + id, <span class="function"><span class="keyword">function</span>(<span class="params">resp</span>) </span>&#123;</span><br><span class="line">		<span class="comment">// callback response</span></span><br><span class="line">		callback(resp.responseText);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">addEvent(element, <span class="string">'click'</span>, getBeerByIdBridge);</span><br><span class="line">　　<span class="function"><span class="keyword">function</span> <span class="title">getBeerByIdBridge</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">　　　　getBeerById(<span class="keyword">this</span>.id, <span class="function"><span class="keyword">function</span>(<span class="params">beer</span>) </span>&#123;</span><br><span class="line">　　　　　　<span class="built_in">console</span>.log(<span class="string">'Requested Beer: '</span>+beer);</span><br><span class="line">　　&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里的getBeerByIdBridge就是我们定义的桥，有了这层桥接元素，这个API的使用范围大大拓宽了，这给了你更大的设计自由。将抽象的click事件和getBeerById连接起来，只需要提供一个ID和回调函数，就可以在单元测试中运行这个API了，也可以在命令行环境中对这个接口进行快速测试。</p>
+<hr>
+<h2 id="组合（Composite）模式"><a href="#组合（Composite）模式" class="headerlink" title="组合（Composite）模式"></a>组合（Composite）模式</h2><p><em>——将对象组合成树形结构以表示“部分-整体”的层次结构。它使得客户对单个对象和复合对象的使用具有一致性</em></p>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ol>
+<li>存在一批组织成某种层次体系的对象。</li>
+<li>希望对这批对象或者其中某一部分对象实施一个操作。<br>将一组对象组合成树形结构，并统一对待组合对象和叶对象，忽略它们之间的不同（因为叶对象也可以也可以包含叶对象而成为组合对象），组合模式中的对象只能是一对多的关系，不能出现多对一。<br>一个组合对象包含多个叶对象。每个基本单元又可以是别的组合对象的叶对象类似文件夹与它里面的内容的关系网，一个文件夹或文件又可以是其它文件夹的内容，但一个文件夹或文件不能同时属于多个上级文件夹。<br>在JavaScript中实现组合模式时，要保证组合对象和叶对象拥有相同的接口方法，对同一组叶对象的操作必须具有一致性。<br>定义组合对象:<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Folder = <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.parent = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.files = [];</span><br><span class="line">    <span class="keyword">this</span>.element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    <span class="keyword">this</span>.element.className = <span class="string">'folder'</span>;</span><br><span class="line">    <span class="keyword">this</span>.element.innerHTML = name;</span><br><span class="line">    <span class="keyword">this</span>.element.style.paddingLeft = <span class="string">'20px'</span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line">Folder.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: Folder,</span><br><span class="line"></span><br><span class="line">    add: function (file) &#123;</span><br><span class="line">        file.parent = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.files.indexOf(file) === <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.files.push(file);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'\''</span> + file.name + <span class="string">'\'添加成功'</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">this</span>.element.appendChild(file.getElement());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'\''</span> + file.name + <span class="string">'\'已存在,添加失败'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    scan: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.parent) &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'开始扫描\''</span> + <span class="keyword">this</span>.parent.name + <span class="string">'\': '</span> + <span class="keyword">this</span>.name);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'开始扫描根目录: '</span> + <span class="keyword">this</span>.name);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//关键在这里，调用所有它的叶对象的接口方法scan()</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, file; file = <span class="keyword">this</span>.files[i++];) &#123;</span><br><span class="line">            file.scan();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    remove: <span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> n = <span class="keyword">this</span>.files.indexOf(file);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (n === <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'无法删除: \''</span> + file.name + <span class="string">'\'不存在:'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.files.splice(n, <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">this</span>.element.removeChild(file.getElement());</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'成功删除:'</span> + file.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    getElement: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.element.innerHTML = <span class="keyword">this</span>.name;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.element;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>定义叶对象：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> File = <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.parent = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    <span class="keyword">this</span>.element.className = <span class="string">'file'</span>;</span><br><span class="line">    <span class="keyword">this</span>.element.style.paddingLeft = <span class="string">'20px'</span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line">File.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: Folder,</span><br><span class="line"></span><br><span class="line">    add: function () &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'不能添加在文件下面'</span>);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    scan: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.parent.name + <span class="string">': '</span> + <span class="keyword">this</span>.name);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    remove: <span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'无法删除: \''</span> + file.name + <span class="string">'\'不存在:'</span>);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    getElement: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.element.innerHTML = <span class="keyword">this</span>.name;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.element;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>测试：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> folder = <span class="keyword">new</span> Folder(<span class="string">'目录'</span>);</span><br><span class="line"><span class="keyword">var</span> folder1 = <span class="keyword">new</span> Folder(<span class="string">'一'</span>);</span><br><span class="line"><span class="keyword">var</span> folder2 = <span class="keyword">new</span> Folder(<span class="string">'二'</span>);</span><br><span class="line"><span class="keyword">var</span> folder3 = <span class="keyword">new</span> Folder(<span class="string">'2.3'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> file11 = <span class="keyword">new</span> File(<span class="string">'1.1'</span>);</span><br><span class="line"><span class="keyword">var</span> file12 = <span class="keyword">new</span> File(<span class="string">'1.2'</span>);</span><br><span class="line"><span class="keyword">var</span> file21 = <span class="keyword">new</span> File(<span class="string">'2.1'</span>);</span><br><span class="line"><span class="keyword">var</span> file22 = <span class="keyword">new</span> File(<span class="string">'2.2'</span>);</span><br><span class="line"><span class="keyword">var</span> file311 = <span class="keyword">new</span> File(<span class="string">'3.1.1'</span>);</span><br><span class="line"></span><br><span class="line">folder.add(folder1);  <span class="comment">//'一'添加成功</span></span><br><span class="line">folder.add(folder2);  <span class="comment">//'二'添加成功</span></span><br><span class="line">folder.add(folder2);  <span class="comment">//'二'已存在,添加失败</span></span><br><span class="line">folder1.add(file11);  <span class="comment">//'1.1'添加成功</span></span><br><span class="line">folder1.add(file12);  <span class="comment">//'1.2'添加成功</span></span><br><span class="line">folder2.add(file21);  <span class="comment">//'2.1'添加成功</span></span><br><span class="line">folder2.add(file22);  <span class="comment">//'2.2'添加成功</span></span><br><span class="line">folder2.add(folder3);  <span class="comment">//'2.3'添加成功</span></span><br><span class="line">folder3.add(file311);  <span class="comment">//'3.1.1'添加成功</span></span><br><span class="line">folder2.remove(file311);  <span class="comment">//无法删除: '3.1.1'不存在:</span></span><br><span class="line">folder2.remove(file22);  <span class="comment">//成功删除:2.2</span></span><br><span class="line">file11.add(file12);  <span class="comment">//不能添加在文件下面</span></span><br><span class="line">folder.scan();  <span class="comment">//开始扫描根目录: 目录</span></span><br><span class="line">                <span class="comment">//开始扫描'目录': 一</span></span><br><span class="line">                <span class="comment">//一: 1.1</span></span><br><span class="line">                <span class="comment">//一: 1.2</span></span><br><span class="line">                <span class="comment">//开始扫描'目录': 二</span></span><br><span class="line">                <span class="comment">//二: 2.1</span></span><br><span class="line">                <span class="comment">//开始扫描'二': 2.3</span></span><br><span class="line">                <span class="comment">//2.3: 3.1.1</span></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(folder.element);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="模块（Module）模式"><a href="#模块（Module）模式" class="headerlink" title="模块（Module）模式"></a>模块（Module）模式</h2><p>模块是任何强大应用程序架构中不可或缺的一部分，它通常能够帮助我们清晰地分离和组织项目中的代码单元。<br>模块模式的思路是为单体模式添加私有变量和私有方法能够减少全局变量的使用；如下就是一个模块模式的代码结构：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> singleMode = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 创建私有变量</span></span><br><span class="line">    <span class="keyword">var</span> privateNum = <span class="number">112</span>;</span><br><span class="line">    <span class="comment">// 创建私有函数</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">privateFunc</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 实现自己的业务逻辑代码</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回一个对象包含公有方法和属性</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        publicMethod1: publicMethod1,</span><br><span class="line">        publicMethod2: publicMethod1</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>模块模式使用了一个返回对象的匿名函数。在这个匿名函数内部，先定义了私有变量和函数，供内部函数使用，然后将一个对象字面量作为函数的值返回，返回的对象字面量中只包含可以公开的属性和方法。这样的话，可以提供外部使用该方法；由于该返回对象中的公有方法是在匿名函数内部定义的，因此它可以访问内部的私有变量和函数。</p>
+<h3 id="适用场景-1"><a href="#适用场景-1" class="headerlink" title="适用场景"></a>适用场景</h3><p>如果我们必须创建一个对象并以某些数据进行初始化，同时还要公开一些能够访问这些私有数据的方法，那么我们这个时候就可以使用模块模式了。</p>
+<h3 id="放大模式"><a href="#放大模式" class="headerlink" title="放大模式"></a>放大模式</h3><p>如果一个模块很大，必须分成几个部分，或者一个模块需要继承另一个模块，这时就有必要采用<code>放大模式</code>（augmentation）。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> module1 = (<span class="function"><span class="keyword">function</span> (<span class="params">mod</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">　　　　mod.m3 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">　　　　　　<span class="comment">//...</span></span><br><span class="line">　　　　&#125;;</span><br><span class="line"></span><br><span class="line">　　　　<span class="keyword">return</span> mod;</span><br><span class="line"></span><br><span class="line">　　&#125;)(module1);</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码为module1模块添加了一个新方法m3()，然后返回新的module1模块。</p>
+<h3 id="宽放大模式"><a href="#宽放大模式" class="headerlink" title="宽放大模式"></a>宽放大模式</h3><p>在浏览器环境中，模块的各个部分通常都是从网上获取的，有时无法知道哪个部分会先加载。如果采用上一节的写法，第一个执行的部分有可能加载一个不存在空对象，这时就要采用<code>宽放大模式</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">　<span class="keyword">var</span> module1 = ( <span class="function"><span class="keyword">function</span> (<span class="params">mod</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">　　　　<span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">　　　　<span class="keyword">return</span> mod;</span><br><span class="line"></span><br><span class="line">　　&#125;)(<span class="built_in">window</span>.module1 || &#123;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>与<code>放大模式</code>相比，<code>宽放大模式</code>就是”立即执行函数”的参数可以是空对象。</p>
+<h3 id="输入全局变量"><a href="#输入全局变量" class="headerlink" title="输入全局变量"></a>输入全局变量</h3><p>独立性是模块的重要特点，模块内部最好不与程序的其他部分直接交互。<br>为了在模块内部调用全局变量，必须显式地将其他变量输入模块。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">　<span class="keyword">var</span> module1 = (<span class="function"><span class="keyword">function</span> (<span class="params">$, YAHOO</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">　　　　<span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">　　&#125;)(jQuery, YAHOO);</span><br></pre></td></tr></table></figure></p>
+<p>上面的module1模块需要使用jQuery库和YUI库，就把这两个库（其实是两个模块）当作参数输入module1。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显。</p>
+<hr>
+<h2 id="观察者-Observer-模式"><a href="#观察者-Observer-模式" class="headerlink" title="观察者(Observer)模式"></a>观察者(Observer)模式</h2><p><strong>–当一个对象的状态发生变化时，能够自动通知其他关联对象，自动刷新对象状态</strong><br>这是一种创建<em>松散耦合</em>代码的技术，在这种模式中，有两类对象，分别为<code>观察者（Observer）</code>和<code>目标对象（Subject）</code>。<br>目标对象中保存着一份观察者的列表，当目标对象的状态发生改变时就主动向观察者发出通知（调用观察者提供的方法），从而建立一种发布/订阅的关系。<br><strong>优点</strong></p>
+<ul>
+<li>支持简单的广播通信，自动通知所有已经订阅过的对象。</li>
+<li>页面载入后目标对象很容易与观察者存在一种动态关联，增加了灵活性。</li>
+<li>目标对象与观察者之间的抽象耦合关系能够单独扩展以及重用。<br><strong>使用场合</strong><br>当一个对象的改变需要同时改变其它对象，并且它不知道具体有多少对象需要改变的时候，就应该考虑使用观察者模式。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Event = &#123;</span><br><span class="line">    <span class="comment">// 存放函数的数组 list</span></span><br><span class="line">    lists: [ ],</span><br><span class="line">    <span class="comment">// 通过on接口添加监听的回调函数进入lists数组</span></span><br><span class="line">    on: <span class="function"><span class="keyword">function</span> (<span class="params">eventName, callback</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.lists[eventName]) &#123;</span><br><span class="line">            <span class="keyword">this</span>.lists[eventName] = [ ];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.lists[eventName].push(callback);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 传递参数触发回调函数列表</span></span><br><span class="line">    emit: <span class="function"><span class="keyword">function</span> (<span class="params">eventName</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.lists[<span class="built_in">arguments</span>[<span class="number">0</span>]]) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.lists[<span class="built_in">arguments</span>[<span class="number">0</span>]].length; i++) &#123;</span><br><span class="line">                <span class="keyword">this</span>.lists[<span class="built_in">arguments</span>[<span class="number">0</span>]][i](<span class="built_in">arguments</span>[<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试</span></span><br><span class="line"><span class="comment">//绑定事件</span></span><br><span class="line">Event.on(<span class="string">'test'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;);</span><br><span class="line">Event.on(<span class="string">'test'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'test'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//触发事件</span></span><br><span class="line">Event.emit(<span class="string">'test'</span>, <span class="string">'hello'</span>);    <span class="comment">//输出 hello   test</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>总的来说，观察者模式所做的工作就是在解耦，让耦合的双方都依赖于抽象，而不是依赖于具体。从而使得各自的变化都不会影响到另一边的变化。</p>
+<footer><br><hr><br><img src="/2017/06/16/JSDesignPatterns/footer.gif" alt="footer"><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="DWP WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpeg" alt="DWP Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a class="footer-tags" href="/tags/js/" rel="tag">js</a>
+          
+            <a class="footer-tags" href="/tags/设计模式/" rel="tag">设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/04/hexo-github/" rel="next" title="hexo + github 免费搭建自己的博客">
+                <i class="fa fa-chevron-left"></i> hexo + github 免费搭建自己的博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/18/react/" rel="prev" title="React学习">
+                React学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="DWP" />
+          <p class="site-author-name" itemprop="name">DWP</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天进步一点点</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/imdwpeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体（Singleton）模式"><span class="nav-number">1.</span> <span class="nav-text">单体（Singleton）模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂（Factory）模式"><span class="nav-number">2.</span> <span class="nav-text">工厂（Factory）模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">2.1.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">2.2.</span> <span class="nav-text">抽象工厂模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接（bridge）模式"><span class="nav-number">3.</span> <span class="nav-text">桥接（bridge）模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合（Composite）模式"><span class="nav-number">4.</span> <span class="nav-text">组合（Composite）模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#适用场景"><span class="nav-number">4.1.</span> <span class="nav-text">适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块（Module）模式"><span class="nav-number">5.</span> <span class="nav-text">模块（Module）模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#适用场景-1"><span class="nav-number">5.1.</span> <span class="nav-text">适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大模式"><span class="nav-number">5.2.</span> <span class="nav-text">放大模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宽放大模式"><span class="nav-number">5.3.</span> <span class="nav-text">宽放大模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入全局变量"><span class="nav-number">5.4.</span> <span class="nav-text">输入全局变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者-Observer-模式"><span class="nav-number">6.</span> <span class="nav-text">观察者(Observer)模式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DWP</span>
+</div>
+
+<i class="fa fa-user"></i>
+总访问量: <span id="busuanzi_value_site_pv"></span> 次
+|
+<i class="fa fa-eye"></i>
+访客数: <span id="busuanzi_value_site_uv"></span> 人
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytu1wwGI';
+      var conf = 'c2af089dceaa5fdb64c3075896de5c82';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("lH50ty9R4pTxi9aOKCv2tYWw-gzGzoHsz", "p6Gd5EcinxeGddql9jVCbk6u");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>

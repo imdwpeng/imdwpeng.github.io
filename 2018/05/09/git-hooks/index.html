@@ -1,0 +1,1223 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="git," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/logo.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍如何用git hooks来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Git】git hooks 自动化部署代码">
+<meta property="og:url" content="http://dwpblog.site/2018/05/09/git-hooks/index.html">
+<meta property="og:site_name" content="DWP&#39;s Blog">
+<meta property="og:description" content="本文主要介绍如何用git hooks来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://dwpblog.site/2018/05/09/git-hooks/index.jpeg">
+<meta property="og:image" content="http://dwpblog.site/2018/05/09/git-hooks/hook-1.png">
+<meta property="og:image" content="http://dwpblog.site/2018/05/09/git-hooks/hook-2.png">
+<meta property="og:image" content="http://dwpblog.site/2018/05/09/git-hooks/hook-3.png">
+<meta property="og:image" content="http://dwpblog.site/2018/05/09/git-hooks/hook-4.png">
+<meta property="og:image" content="http://dwpblog.site/images/footer.gif">
+<meta property="og:updated_time" content="2019-08-01T03:45:04.831Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Git】git hooks 自动化部署代码">
+<meta name="twitter:description" content="本文主要介绍如何用git hooks来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。">
+<meta name="twitter:image" content="http://dwpblog.site/2018/05/09/git-hooks/index.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://dwpblog.site/2018/05/09/git-hooks/"/>
+
+
+
+
+
+
+  <title>【Git】git hooks 自动化部署代码 | DWP's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+<canvas id="canvas"></canvas>
+<div class="bg-night">
+    <img src="http://dwpblog.site/images/1.png">
+</div>
+
+<script type="text/javascript">
+
+    class Moon {
+        constructor(ctx, width, height) {
+            this.ctx = ctx;
+            this.width = width;
+            this.height = height;
+            this.circle_x = width / 2;      //旋转轨迹圆心的X坐标
+            this.circle_y = width;          //旋转轨迹圆心的Y坐标
+            this.circle_r = width;          //旋转轨迹的半径
+            this.angle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2);                  //旋转轨迹的角度
+            this.startAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2 - 400);       //开始旋转的角度
+            this.endAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), width / 2 + 200);          //结束旋转的角度
+            this.x = 0;         //月亮的X坐标
+            this.y = 0;         //月亮的Y坐标
+        }
+
+        draw() {
+            let {ctx, x, y, width, height} = this;
+
+            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 400);
+            gradient.addColorStop(0, 'rgb(255,255,255)');
+            gradient.addColorStop(0.01, 'rgb(70,70,80)');
+            gradient.addColorStop(0.2, 'rgb(40,40,50)');
+            gradient.addColorStop(0.4, 'rgb(20,20,30)');
+            gradient.addColorStop(1, 'rgb(11,14,33)');
+
+            ctx.save();
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+
+        move() {
+            let {circle_x, circle_y, circle_r, angle, startAngle, endAngle,} = this;
+            this.angle = angle - 0.0001;
+
+            if (this.angle <= endAngle) {
+                this.angle = startAngle;
+            }
+
+            this.x = circle_x + (circle_r * Math.cos(angle));
+            this.y = circle_y - (circle_r * Math.sin(angle)) + 50;
+        }
+    }
+
+    class Stars {
+        constructor(ctx, width, height, amount) {
+            this.ctx = ctx
+            this.width = width
+            this.height = height
+            this.stars = this.getStars(amount)
+        }
+
+        getStars(amount) {
+            let stars = []
+            while (amount--) {
+                stars.push({
+                    x: Math.random() * this.width,
+                    y: Math.random() * this.height,
+                    r: Math.random() + 0.2
+                })
+            }
+            return stars
+        }
+
+        draw() {
+            let ctx = this.ctx
+            ctx.save()
+            ctx.fillStyle = 'white'
+            this.stars.forEach(star => {
+                ctx.beginPath()
+                ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI)
+                ctx.fill()
+            })
+            ctx.restore()
+        }
+
+        //闪烁，星星半径每隔10帧随机变大或变小
+        blink() {
+            this.stars = this.stars.map(star => {
+                let sign = Math.random() > 0.5 ? 1 : -1
+                star.r += sign * 0.2
+                if (star.r < 0) {
+                    star.r = -star.r
+                } else if (star.r > 1) {
+                    star.r -= 0.2
+                }
+                return star
+            })
+
+        }
+    }
+
+    class Meteor {
+        constructor(ctx, x, h) {
+            this.ctx = ctx;
+            this.x = x;
+            this.y = 0;
+            this.h = h;
+            this.vx = -(5 + Math.random() * 5);
+            this.vy = -this.vx;
+            this.len = Math.random() * 300 + 100;
+        }
+
+        flow() {
+            //判定流星出界
+            if (this.x < -this.len || this.y > this.h + this.len) {
+                return false
+            }
+            this.x += this.vx;
+            this.y += this.vy;
+            return true
+        }
+
+        draw() {
+            let ctx = this.ctx,
+                //径向渐变，从流星头尾圆心，半径越大，透明度越高
+                gra = ctx.createRadialGradient(
+                    this.x, this.y, 0, this.x, this.y, this.len);
+
+            const PI = Math.PI;
+            gra.addColorStop(0, 'rgba(255,255,255,1)');
+            gra.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.save();
+            ctx.fillStyle = gra;
+            ctx.beginPath();
+            //流星头，二分之一圆
+            ctx.arc(this.x, this.y, .5, PI / 4, 5 * PI / 4);
+            //绘制流星尾，三角形
+            ctx.lineTo(this.x + this.len, this.y - this.len);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    let width = window.innerWidth,
+        height = window.innerHeight,
+        canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext('2d'),
+        //实例化月亮和星星。流星是随机时间生成，所以只初始化数组
+        moon = new Moon(ctx, width, height),
+        stars = new Stars(ctx, width, height, 200),
+        meteors = [],
+        count = 0;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    //流星生成函数
+    const meteorGenerator = () => {
+        //x位置偏移，以免经过月亮
+        let x = Math.random() * width;
+        meteors.push(new Meteor(ctx, x, height));
+    }
+
+    //每一帧动画生成函数
+    const frame = () => {
+        //每隔100帧星星闪烁一次，节省计算资源
+        count++;
+        count % 100 == 0 && stars.blink();
+        count % 300 == 0 && meteorGenerator();
+
+        moon.move();
+        moon.draw();
+        stars.draw();
+
+        meteors.forEach((meteor, index, arr) => {
+            //如果流星离开视野之内，销毁流星实例，回收内存
+            if (meteor.flow()) {
+                meteor.draw()
+            } else {
+                arr.splice(index, 1)
+            }
+        });
+        requestAnimationFrame(frame);
+    };
+
+    meteorGenerator();
+    frame();
+</script>
+
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b41f87eb7451df9dce1958cacad63f25";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <a href="https://github.com/imdwpeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png"></a>
+
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DWP's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Learn and Live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ebook">
+          <a href="/ebook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            电子书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resource">
+          <a href="/resource" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
+            
+            资源
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2018/05/09/git-hooks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【Git】git hooks 自动化部署代码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-09T20:56:02+08:00">
+                2018-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/05/09/git-hooks/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/05/09/git-hooks/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2018/05/09/git-hooks/" class="leancloud_visitors" data-flag-title="【Git】git hooks 自动化部署代码">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,025
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要介绍如何用<code>git hooks</code>来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。</p>
+<p><img src="/2018/05/09/git-hooks/index.jpeg" alt="title"></p>
+<a id="more"></a>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>用<code>git</code>管理代码时，每次发布时，我们都需要经过以下步骤：</p>
+<ol>
+<li>将本地代码<code>push</code>至远程仓库；</li>
+<li>然后再<code>ssh</code>到服务器上进行<code>git pull</code>操作；</li>
+<li>对代码进行编译打包压缩发布等吧啦吧啦各种无趣的操作；</li>
+</ol>
+<p>这很是繁琐，本着程序猿（媛）能躺着就不坐着的基本素养，我们是不是能够自动去监测我们的远程仓库，当我们每次<code>push</code>之后，它就自动去实现代码的更新编译部署等一系列功能呢？答案是，当然可以。<br>下面就开始漫漫踩坑路。</p>
+<h2 id="自动部署理论"><a href="#自动部署理论" class="headerlink" title="自动部署理论"></a>自动部署理论</h2><p>首页，我们要明确项目代码的分布情况：开发者电脑的本地仓库，git服务器上的远程仓库，web服务器上的本地仓库（我们浏览访问的就是这里的代码）。<br>所谓自动部署，就是当我们将代码从本地仓库push到远程仓库时，自动把代码部署到web服务器上的本地仓库，实现开发者电脑的本地仓库和web服务器上的本地仓库代码同步。</p>
+<h2 id="git-hooks"><a href="#git-hooks" class="headerlink" title="git hooks"></a>git hooks</h2><p>git有一个神器：<a href="https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-Git-%E9%92%A9%E5%AD%90" target="_blank" rel="external">git hooks</a>，没了解过的话可以去官网了解下。<br>它的功能是能在特定的重要动作发生时触发自定义脚本。 它有两组这样的钩子：客户端的和服务器端的。 客户端钩子由诸如提交和合并这样的操作所调用，而服务器端钩子作用于诸如接收被推送的提交这样的联网操作。 你可以随心所欲地运用这些钩子。<br>这里我们主要用到服务端的钩子：<code>post-receive</code>。</p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>本例服务器环境：<br>&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111<br>&emsp;&emsp;&emsp;&emsp;用户：root</p>
+<p>约定（可自定义）：<br>&emsp;&emsp;&emsp;&emsp;裸仓库建在<code>/home/workspace</code>下<br>&emsp;&emsp;&emsp;&emsp;web本地仓库建在<code>/home/www</code>下<br>&emsp;&emsp;&emsp;&emsp;所属用户：git</p>
+<h3 id="Git服务器搭建"><a href="#Git服务器搭建" class="headerlink" title="Git服务器搭建"></a>Git服务器搭建</h3><p>1.连接至服务器<br>ssh连接至服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@111.111.111.111</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/05/09/git-hooks/hook-1.png" alt="hook-1"></p>
+<p>2.创建git用户<br>我们创建一个<code>git</code>用户，专门用来运行<code>git</code>服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser git   创建用户</span><br><span class="line">sudo passwd git    设置密码</span><br></pre></td></tr></table></figure></p>
+<p>3.创建裸仓库<br>我们在<code>/home/workspace</code>文件夹下创建Git裸仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/workspace</span><br><span class="line">cd /home/workspace</span><br><span class="line">git init --bare layercake.git</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/05/09/git-hooks/hook-2.png" alt="hook-2"></p>
+<h3 id="配置Git-Hooks"><a href="#配置Git-Hooks" class="headerlink" title="配置Git Hooks"></a>配置Git Hooks</h3><p>进入<code>/home/workspace/layercake.git</code>文件夹，使用<code>vi post-receive</code>创建一个脚本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/workspace/layercake.git/hooks</span><br><span class="line">vi post-receive</span><br></pre></td></tr></table></figure></p>
+<p>当我们本地<code>git push</code>之后就会触发服务器上的<code>post-receive</code>脚本<br><code>post-receive</code>内容如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">unset</span> GIT_DIR</span><br><span class="line"><span class="built_in">cd</span> /home/www/layercake</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure></p>
+<p>这是一个简单的脚本，文章结尾有更复杂的<code>post-receive</code>配置，可以根据不同分支进行不同操作。</p>
+<p>再配置<code>post-receive</code>权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x post-receive</span><br></pre></td></tr></table></figure></p>
+<h3 id="创建代码仓库"><a href="#创建代码仓库" class="headerlink" title="创建代码仓库"></a>创建代码仓库</h3><p>然后我们在<code>/home/www</code>下创建一个代码仓库，关联先前创建的<code>layercake</code>仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/www</span><br><span class="line">cd /home/www</span><br><span class="line">git clone /home/workspace/layercake.git</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/05/09/git-hooks/hook-3.png" alt="hook-3"></p>
+<h3 id="配置公钥"><a href="#配置公钥" class="headerlink" title="配置公钥"></a>配置公钥</h3><p>如不配置公钥，每次本地<code>push</code>时都会要求输入服务器密码，不胜其烦，故我们配置下公钥来跳过这一步骤。<br>将本机的公钥加入至<code>/home/git/.ssh/authorized_keys</code>中，<code>authorized_keys</code>文件里包含所有该项目的开发者们的ssh公钥。<br>如果没有该文件则创建它：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/git</span><br><span class="line">cd /home/git</span><br><span class="line">mkdir .ssh</span><br><span class="line">chmod 755 .ssh</span><br><span class="line">touch .ssh/authorized_keys</span><br><span class="line">chmod 644 .ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>如本地没有创建过密钥，则执行<code>ssh-keygen -t rsa -C xx</code>来创建自己本地的密钥，<code>xx</code>为自己的邮箱，然后按提示操作即可。</p>
+<p>此时本地会生成<code>.ssh</code>文件夹，打开里面的<code>id_rsa.pub</code>文件，复制内容粘贴至上面说的<code>authorized_keys</code>文件中就即可。</p>
+<p>然后设置下仓库所属用户（git）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R git:git /home/workspace/layercake.git</span><br><span class="line">sudo chown -R git:git /home/www/layercake</span><br></pre></td></tr></table></figure></p>
+<h3 id="本地克隆仓库"><a href="#本地克隆仓库" class="headerlink" title="本地克隆仓库"></a>本地克隆仓库</h3><p>在本地电脑上，克隆服务器上的git仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@111.111.111.111:/home/workspace/layercake.git</span><br></pre></td></tr></table></figure></p>
+<p>按照提示输入服务器密码即可。<br><img src="/2018/05/09/git-hooks/hook-4.png" alt="hook-4"></p>
+<p>到此，全部配置已完成，以后每次本地仓库<code>push</code>至远程仓库时，都会触发<code>post-receive</code>脚本，从而更新<code>/home/www/layercake</code>仓库代码。</p>
+<h2 id="完整版post-receive脚本配置"><a href="#完整版post-receive脚本配置" class="headerlink" title="完整版post-receive脚本配置"></a>完整版<code>post-receive</code>脚本配置</h2><p>功能：</p>
+<p>1.根据不同分支进行不同操作：<br>我们可以定义不同分支，当该分支push后触发对应操作，如<code>dev_debug</code>分支更新时触发测试库代码更新。</p>
+<p>2.跨服务器操作：<br>当我们的web服务器代码和服务器上的本地代码位于不同服务器时，通过<code>scp</code>命令进行文件或目录的复制。</p>
+<p>每次<code>scp</code>命令复制时，都需要输入接收服务器的密码，这不是程序猿（媛）的风格，所以我们也采用公钥配置方式来免去输入密码这一步。</p>
+<p>假如web服务器(F2)：<br>&emsp;&emsp;&emsp;&emsp;主机：222.222.222.222<br>&emsp;&emsp;&emsp;&emsp;用户：root</p>
+<p>远程仓库(F1)：<br>&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111<br>&emsp;&emsp;&emsp;&emsp;用户：git</p>
+<p><strong>F1服务器操作：</strong></p>
+<p><code>ssh</code>连接至F1，创建密钥：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh git@111.111.111.111   # 连接至服务器，按提示输入密码</span><br><span class="line"></span><br><span class="line">ssh-keygen -t rsa   # 创建密钥（如F1服务器还未创建密钥），一路回车，无须设置密码</span><br></pre></td></tr></table></figure>
+<p>在<code>.ssh</code>目录下会生成<code>id_rsa</code>（私钥）和 <code>id_rsa.pub</code>（公钥）两个文件，复制<code>id_rsa.pub</code>中的内容。</p>
+<p><strong>F2服务器操作：</strong></p>
+<p>连接上F2服务器，将F1公钥添加至<code>/root/.ssh/authorized_keys</code>中即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssh root@222.222.222.222  # 连接至服务器，按提示输入密码</span><br><span class="line">vi /root/.ssh/authorized_keys</span><br><span class="line">// 添加F1的公钥，保存退出</span><br><span class="line"></span><br><span class="line">chmod 600 /root/.ssh/authorized_keys  # 设置文件权限600</span><br></pre></td></tr></table></figure>
+<p>有时候连接服务器会出现以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Are you sure you want to continue connecting (yes/no)?</span><br></pre></td></tr></table></figure>
+<p>我们是脚本运行，所以不好去输入<code>yes</code>，解决方法有两种：</p>
+<p> 1.在F1的<code>post-receive</code>脚本中使用<code>ssh -o</code>的参数进行设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -o StrictHostKeyChecking=no root@222.222.222</span><br></pre></td></tr></table></figure></p>
+<p>2.修改F2服务器中<code>/etc/ssh/ssh_config</code>：<br>将其中的<code># StrictHostKeyChecking ask</code>改成<code>StrictHostKeyChecking no</code>。</p>
+<p>本例采用第一种方法。</p>
+<p>以下是本例中完整的<code>post-receive</code>配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### 用户配置区 开始 ######</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># web服务器本地仓库目录</span></span><br><span class="line">DEPLOY_PATH=<span class="string">"/home/www/layercake"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试库分支、测试服务器</span></span><br><span class="line">dev_debug=<span class="string">"dev_debug"</span></span><br><span class="line">debug_user=<span class="string">"root"</span></span><br><span class="line">debug_host=<span class="string">"222.222.222.222"</span></span><br><span class="line">debug_path=<span class="string">"<span class="variable">$&#123;debug_user&#125;</span>@<span class="variable">$&#123;debug_host&#125;</span>:/home/www"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 灰度分支、灰度服务器</span></span><br><span class="line">dev_test=<span class="string">"dev_test"</span></span><br><span class="line">test_user=<span class="string">"root"</span></span><br><span class="line">test_host=<span class="string">"222.222.222.222"</span></span><br><span class="line">test_path=<span class="string">"<span class="variable">$&#123;test_user&#125;</span>@<span class="variable">$&#123;test_host&#125;</span>:/home/www"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 正式库分支、正式服务器</span></span><br><span class="line">dev_prod=<span class="string">"master"</span></span><br><span class="line">prod_user=<span class="string">"root"</span></span><br><span class="line">prod_host=<span class="string">"222.222.222.222"</span></span><br><span class="line">prod_path=<span class="string">"<span class="variable">$&#123;prod_user&#125;</span>@<span class="variable">$&#123;prod_host&#125;</span>:/home/www"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### 用户配置区 结束 ######</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">"none"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去掉Git默认的环境变量</span></span><br><span class="line"><span class="built_in">unset</span> GIT_DIR</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> oldrev newrev refname</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="comment"># 当前分支</span></span><br><span class="line">    branch=$(git rev-parse --symbolic --abbrev-ref <span class="variable">$refname</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"======= start ======="</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Target branch: <span class="variable">$branch</span>"</span></span><br><span class="line">    <span class="comment"># 指定到项目文件夹</span></span><br><span class="line">    <span class="built_in">cd</span> <span class="variable">$DEPLOY_PATH</span></span><br><span class="line">    <span class="comment"># 创建分支（已存在会提示已存在，继续往下执行）</span></span><br><span class="line">    git branch <span class="variable">$branch</span></span><br><span class="line">    <span class="comment"># 指定到该分支</span></span><br><span class="line">    git checkout <span class="variable">$branch</span></span><br><span class="line">    <span class="comment"># 拉取代码</span></span><br><span class="line">    git pull origin <span class="variable">$branch</span>:<span class="variable">$branch</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 根据分支判断上传环境</span></span><br><span class="line">    <span class="keyword">case</span> <span class="variable">$branch</span> <span class="keyword">in</span></span><br><span class="line">        <span class="variable">$dev_debug</span>)</span><br><span class="line">            envName=<span class="string">"测试库"</span></span><br><span class="line">            path=<span class="variable">$&#123;debug_path&#125;</span></span><br><span class="line">            user=<span class="variable">$&#123;debug_user&#125;</span></span><br><span class="line">            host=<span class="variable">$&#123;debug_host&#125;</span></span><br><span class="line">            ;;</span><br><span class="line">        <span class="variable">$dev_test</span>)</span><br><span class="line">            envName=<span class="string">"灰度"</span></span><br><span class="line">            path=<span class="variable">$&#123;test_path&#125;</span></span><br><span class="line">            user=<span class="variable">$&#123;test_user&#125;</span></span><br><span class="line">            host=<span class="variable">$&#123;test_host&#125;</span></span><br><span class="line">            ;;</span><br><span class="line">         <span class="variable">$dev_prod</span>)</span><br><span class="line">            envName=<span class="string">"正式库"</span></span><br><span class="line">            path=<span class="variable">$&#123;prod_path&#125;</span></span><br><span class="line">            user=<span class="variable">$&#123;prod_user&#125;</span></span><br><span class="line">            host=<span class="variable">$&#123;prod_host&#125;</span></span><br><span class="line">            ;;</span><br><span class="line">        *)</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"fail!"</span></span><br><span class="line">            ;;</span><br><span class="line">    <span class="keyword">esac</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 上传至测试环境、灰度、正式环境</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$path</span> != <span class="string">"none"</span> ]</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        ssh -o StrictHostKeyChecking=no <span class="variable">$&#123;user&#125;</span>@<span class="variable">$&#123;host&#125;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># -r 拷贝文件夹</span></span><br><span class="line">        <span class="comment"># -v 显示详情</span></span><br><span class="line">        rsync -r -v <span class="variable">$DEPLOY_PATH</span> <span class="variable">$path</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"publish to <span class="variable">$envName</span>..."</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"======= end ======="</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<footer><br><hr><br><img src="http://dwpblog.site/images/footer.gif" alt="footer"><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="DWP WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpeg" alt="DWP Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a class="footer-tags" href="/tags/git/" rel="tag">git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/12/travis-ci/" rel="next" title="【Git】持续集成之Travis CI自动化部署">
+                <i class="fa fa-chevron-left"></i> 【Git】持续集成之Travis CI自动化部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/02/jest/" rel="prev" title="【前端测试】基于Jest+Enzyme+React的前端测试">
+                【前端测试】基于Jest+Enzyme+React的前端测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="DWP" />
+          <p class="site-author-name" itemprop="name">DWP</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天进步一点点</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/imdwpeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动部署理论"><span class="nav-number">2.</span> <span class="nav-text">自动部署理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-hooks"><span class="nav-number">3.</span> <span class="nav-text">git hooks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建"><span class="nav-number">4.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git服务器搭建"><span class="nav-number">4.1.</span> <span class="nav-text">Git服务器搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Git-Hooks"><span class="nav-number">4.2.</span> <span class="nav-text">配置Git Hooks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建代码仓库"><span class="nav-number">4.3.</span> <span class="nav-text">创建代码仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置公钥"><span class="nav-number">4.4.</span> <span class="nav-text">配置公钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地克隆仓库"><span class="nav-number">4.5.</span> <span class="nav-text">本地克隆仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整版post-receive脚本配置"><span class="nav-number">5.</span> <span class="nav-text">完整版post-receive脚本配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DWP</span>
+</div>
+
+<i class="fa fa-user"></i>
+总访问量: <span id="busuanzi_value_site_pv"></span> 次
+|
+<i class="fa fa-eye"></i>
+访客数: <span id="busuanzi_value_site_uv"></span> 人
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytu1wwGI';
+      var conf = 'c2af089dceaa5fdb64c3075896de5c82';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("lH50ty9R4pTxi9aOKCv2tYWw-gzGzoHsz", "p6Gd5EcinxeGddql9jVCbk6u");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>

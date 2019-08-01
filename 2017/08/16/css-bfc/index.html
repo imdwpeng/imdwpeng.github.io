@@ -1,0 +1,1185 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="css," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/logo.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="keywords" content="css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【CSS】BFC原理及应用解析">
+<meta property="og:url" content="http://dwpblog.site/2017/08/16/css-bfc/index.html">
+<meta property="og:site_name" content="DWP&#39;s Blog">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/index.jpeg">
+<meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/1.png">
+<meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/2.png">
+<meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/footer.gif">
+<meta property="og:updated_time" content="2019-08-01T03:45:04.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【CSS】BFC原理及应用解析">
+<meta name="twitter:image" content="http://dwpblog.site/2017/08/16/css-bfc/index.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://dwpblog.site/2017/08/16/css-bfc/"/>
+
+
+
+
+
+
+  <title>【CSS】BFC原理及应用解析 | DWP's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+<canvas id="canvas"></canvas>
+<div class="bg-night">
+    <img src="http://dwpblog.site/images/1.png">
+</div>
+
+<script type="text/javascript">
+
+    class Moon {
+        constructor(ctx, width, height) {
+            this.ctx = ctx;
+            this.width = width;
+            this.height = height;
+            this.circle_x = width / 2;      //旋转轨迹圆心的X坐标
+            this.circle_y = width;          //旋转轨迹圆心的Y坐标
+            this.circle_r = width;          //旋转轨迹的半径
+            this.angle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2);                  //旋转轨迹的角度
+            this.startAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), -width / 2 - 400);       //开始旋转的角度
+            this.endAngle = Math.atan2(Math.sqrt(width * width * 3 / 4), width / 2 + 200);          //结束旋转的角度
+            this.x = 0;         //月亮的X坐标
+            this.y = 0;         //月亮的Y坐标
+        }
+
+        draw() {
+            let {ctx, x, y, width, height} = this;
+
+            var gradient = ctx.createRadialGradient(x, y, 50, x, y, 400);
+            gradient.addColorStop(0, 'rgb(255,255,255)');
+            gradient.addColorStop(0.01, 'rgb(70,70,80)');
+            gradient.addColorStop(0.2, 'rgb(40,40,50)');
+            gradient.addColorStop(0.4, 'rgb(20,20,30)');
+            gradient.addColorStop(1, 'rgb(11,14,33)');
+
+            ctx.save();
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+
+        move() {
+            let {circle_x, circle_y, circle_r, angle, startAngle, endAngle,} = this;
+            this.angle = angle - 0.0001;
+
+            if (this.angle <= endAngle) {
+                this.angle = startAngle;
+            }
+
+            this.x = circle_x + (circle_r * Math.cos(angle));
+            this.y = circle_y - (circle_r * Math.sin(angle)) + 50;
+        }
+    }
+
+    class Stars {
+        constructor(ctx, width, height, amount) {
+            this.ctx = ctx
+            this.width = width
+            this.height = height
+            this.stars = this.getStars(amount)
+        }
+
+        getStars(amount) {
+            let stars = []
+            while (amount--) {
+                stars.push({
+                    x: Math.random() * this.width,
+                    y: Math.random() * this.height,
+                    r: Math.random() + 0.2
+                })
+            }
+            return stars
+        }
+
+        draw() {
+            let ctx = this.ctx
+            ctx.save()
+            ctx.fillStyle = 'white'
+            this.stars.forEach(star => {
+                ctx.beginPath()
+                ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI)
+                ctx.fill()
+            })
+            ctx.restore()
+        }
+
+        //闪烁，星星半径每隔10帧随机变大或变小
+        blink() {
+            this.stars = this.stars.map(star => {
+                let sign = Math.random() > 0.5 ? 1 : -1
+                star.r += sign * 0.2
+                if (star.r < 0) {
+                    star.r = -star.r
+                } else if (star.r > 1) {
+                    star.r -= 0.2
+                }
+                return star
+            })
+
+        }
+    }
+
+    class Meteor {
+        constructor(ctx, x, h) {
+            this.ctx = ctx;
+            this.x = x;
+            this.y = 0;
+            this.h = h;
+            this.vx = -(5 + Math.random() * 5);
+            this.vy = -this.vx;
+            this.len = Math.random() * 300 + 100;
+        }
+
+        flow() {
+            //判定流星出界
+            if (this.x < -this.len || this.y > this.h + this.len) {
+                return false
+            }
+            this.x += this.vx;
+            this.y += this.vy;
+            return true
+        }
+
+        draw() {
+            let ctx = this.ctx,
+                //径向渐变，从流星头尾圆心，半径越大，透明度越高
+                gra = ctx.createRadialGradient(
+                    this.x, this.y, 0, this.x, this.y, this.len);
+
+            const PI = Math.PI;
+            gra.addColorStop(0, 'rgba(255,255,255,1)');
+            gra.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.save();
+            ctx.fillStyle = gra;
+            ctx.beginPath();
+            //流星头，二分之一圆
+            ctx.arc(this.x, this.y, .5, PI / 4, 5 * PI / 4);
+            //绘制流星尾，三角形
+            ctx.lineTo(this.x + this.len, this.y - this.len);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    let width = window.innerWidth,
+        height = window.innerHeight,
+        canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext('2d'),
+        //实例化月亮和星星。流星是随机时间生成，所以只初始化数组
+        moon = new Moon(ctx, width, height),
+        stars = new Stars(ctx, width, height, 200),
+        meteors = [],
+        count = 0;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    //流星生成函数
+    const meteorGenerator = () => {
+        //x位置偏移，以免经过月亮
+        let x = Math.random() * width;
+        meteors.push(new Meteor(ctx, x, height));
+    }
+
+    //每一帧动画生成函数
+    const frame = () => {
+        //每隔100帧星星闪烁一次，节省计算资源
+        count++;
+        count % 100 == 0 && stars.blink();
+        count % 300 == 0 && meteorGenerator();
+
+        moon.move();
+        moon.draw();
+        stars.draw();
+
+        meteors.forEach((meteor, index, arr) => {
+            //如果流星离开视野之内，销毁流星实例，回收内存
+            if (meteor.flow()) {
+                meteor.draw()
+            } else {
+                arr.splice(index, 1)
+            }
+        });
+        requestAnimationFrame(frame);
+    };
+
+    meteorGenerator();
+    frame();
+</script>
+
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b41f87eb7451df9dce1958cacad63f25";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <a href="https://github.com/imdwpeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png"></a>
+
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DWP's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Learn and Live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ebook">
+          <a href="/ebook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            电子书
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resource">
+          <a href="/resource" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
+            
+            资源
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/08/16/css-bfc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DWP">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DWP's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【CSS】BFC原理及应用解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-16T14:34:16+08:00">
+                2017-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/08/16/css-bfc/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/08/16/css-bfc/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/08/16/css-bfc/" class="leancloud_visitors" data-flag-title="【CSS】BFC原理及应用解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  843
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2017/08/16/css-bfc/index.jpeg" alt="css-bfc"></p>
+<a id="more"></a>
+<h2 id="什么是BFC"><a href="#什么是BFC" class="headerlink" title="什么是BFC"></a>什么是BFC</h2><p>第一次听到这个名字，我是一脸懵逼的，css 什么时候有这东西了？于是偷偷上网脑补一下，原来这就是个隐藏的大boss，我们每时每刻都在用着，却不知道原来这就是它的庐山真面目。<br><strong>BFC</strong>（Block Formatting Context），中文直译为块级格式上下文。它决定了元素如何对其内容进行定位，以及与其他元素的关系和相互作用。简单来说，它就是一个独立的盒子，这个盒子中的元素的布局与盒子之外的布局之间不会相互影响。</p>
+<h2 id="创建-BFC"><a href="#创建-BFC" class="headerlink" title="创建 BFC"></a>创建 BFC</h2><ol>
+<li>浮动元素：<code>float</code>属性不为<code>none</code></li>
+<li><code>overflow</code>不为<code>visible</code>(可以是<code>hidden</code>、<code>scroll</code>、<code>auto</code>)</li>
+<li>绝对定位元素：<code>position</code>为<code>absolute</code>或<code>fixed</code></li>
+<li><code>display</code>为<code>inline-block</code>、<code>table-cell</code>、<code>table-caption</code></li>
+</ol>
+<h2 id="BFC-布局规则"><a href="#BFC-布局规则" class="headerlink" title="BFC 布局规则"></a>BFC 布局规则</h2><p>1.在<code>BFC</code>下，内部的块级元素会从顶部开始挨个的垂直排列，水平方向撑满整个宽度（除非该元素本身又创建了新的<code>BFC</code>）；<br>2.每个块级元素的左边框都是紧挨着盒子的左外边的，即使存在浮动也一样，（从右到左的格式，则是挨着右外边）；<br><img src="/2017/08/16/css-bfc/1.png" alt="bfc-1"></p>
+<p>3.两个<code>BFC</code>之间的间距是根据<code>margin</code>值决定的，这个是正常的规则，但是属于一个<code>BFC</code>下的块级元素之间的<code>margin</code>则会发生重叠，它们是由<code>margin</code>值大的一方主宰；<br><img src="/2017/08/16/css-bfc/2.png" alt="bfc-2"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    margin: 10px 0;</span><br><span class="line">    border: 1px solid #000;</span><br><span class="line">    background: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child &#123;</span><br><span class="line">    margin: 10px 0;</span><br><span class="line">    height: 24px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.new-bfc&#123;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child 1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child 2&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child 3&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child 1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child 2&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;new-bfc&quot;&gt;      //新建一个BFC</span><br><span class="line">        &lt;div class=&quot;child&quot;&gt;Child 3&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>4.计算<code>BFC</code>的高度时，浮动元素也参与计算，看到这条规则，你能联想到什么？没错，这也是一种 <strong>清除浮动</strong> 的有效方法；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    width: 120px;</span><br><span class="line">    border: 1px solid #000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child &#123;</span><br><span class="line">    float: left;</span><br><span class="line">    margin: 10px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 24px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;Child&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在上面的这个例子中，父容器没有设置高度，子元素由于浮动不能撑开父元素的高度，所以出现父元素高度塌陷问题。为了解决这个问题，我们通过添加<code>overflow:hidden</code>，在容器中创建一个新的BFC。修改过父元素的CSS：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    width: 120px;</span><br><span class="line">    border: 1px solid #000;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时，计算父元素的高度时，浮动元素也会参与计算，解决了高度塌陷的问题。</p>
+<h2 id="BFC-应用"><a href="#BFC-应用" class="headerlink" title="BFC 应用"></a>BFC 应用</h2><h3 id="解决浮动"><a href="#解决浮动" class="headerlink" title="解决浮动"></a>解决浮动</h3><p>这个上面讲过了，这里不再重复。</p>
+<h3 id="自适应两栏布局"><a href="#自适应两栏布局" class="headerlink" title="自适应两栏布局"></a>自适应两栏布局</h3><p>采用<code>float + overflow:hidden</code>布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    width: 250px;</span><br><span class="line">    border: 1px solid #000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.aside &#123;</span><br><span class="line">    float: left;</span><br><span class="line">    margin: 10px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 25px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.main &#123;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background: red;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;aside&quot;&gt;aside&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;main&quot;&gt;main&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>aside模块设置<code>float:left</code>，main模块设置<code>overflow:hidden</code>，两者都是<code>BFC</code>，所以相互独立，互不影响。</p>
+<footer><br><hr><br><img src="/2017/08/16/css-bfc/footer.gif" alt="footer"><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="DWP WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpeg" alt="DWP Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a class="footer-tags" href="/tags/css/" rel="tag">css</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/18/react/" rel="next" title="React学习">
+                <i class="fa fa-chevron-left"></i> React学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/16/git/" rel="prev" title="Git 学习手扎">
+                Git 学习手扎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="DWP" />
+          <p class="site-author-name" itemprop="name">DWP</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天进步一点点</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/imdwpeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是BFC"><span class="nav-number">1.</span> <span class="nav-text">什么是BFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-BFC"><span class="nav-number">2.</span> <span class="nav-text">创建 BFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFC-布局规则"><span class="nav-number">3.</span> <span class="nav-text">BFC 布局规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFC-应用"><span class="nav-number">4.</span> <span class="nav-text">BFC 应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决浮动"><span class="nav-number">4.1.</span> <span class="nav-text">解决浮动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自适应两栏布局"><span class="nav-number">4.2.</span> <span class="nav-text">自适应两栏布局</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DWP</span>
+</div>
+
+<i class="fa fa-user"></i>
+总访问量: <span id="busuanzi_value_site_pv"></span> 次
+|
+<i class="fa fa-eye"></i>
+访客数: <span id="busuanzi_value_site_uv"></span> 人
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytu1wwGI';
+      var conf = 'c2af089dceaa5fdb64c3075896de5c82';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("lH50ty9R4pTxi9aOKCv2tYWw-gzGzoHsz", "p6Gd5EcinxeGddql9jVCbk6u");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
