@@ -4,8 +4,10 @@ date: 2019-04-02 13:38:45
 tags: ['jest','enzyme','前端测试']
 categories: '前端测试'
 ---
-![jest](index.jpeg)
+![此处输入图片的描述][1]
+
 本文中的自动化测试指的是单元测试 （UT），所谓单元测试也就是对每个单元进行测试，通俗的将一般针对的是函数，类或单个组件，不涉及系统和集成。单元测试是软件测试的基础测试，主要是用来验证所测代码是否和程序员的期望一致。
+
 <!--more-->
 
 ## 背景
@@ -25,7 +27,7 @@ categories: '前端测试'
 
 ### 测试框架
 
-![grameworks](1.png)
+![此处输入图片的描述][2]
 
 **Jest**
 
@@ -66,7 +68,7 @@ test|测试用例，别名 `it`
 expect|执行一个断言
 
 ### 常见断言
-匹配器（Matchers）是 `Jest` 中非常重要的一个概念，它可以提供很多种方式来让你去验证你所测试的返回值，这里文重点介绍几种常用的 `Matcher` ，其他的可以通过 [官网api文档](https://jestjs.io/docs/en/expect) 查看。
+匹配器（Matchers）是 `Jest` 中非常重要的一个概念，它可以提供很多种方式来让你去验证你所测试的返回值，这里文重点介绍几种常用的 `Matcher` ，其他的可以通过 [官网api文档][3] 查看。
 
 匹配器|说明
 ---|---
@@ -168,10 +170,10 @@ describe('Test Add',()=>{
 ```
 
 终端执行命令 `npm run test`
-![result_1](result_1.png)
+![此处输入图片的描述][4]
 
 ## Enzyme
-[enzyme](https://airbnb.io/enzyme) 是 `Airbnb` 开源的 `react` 测试类库，提供了一套简洁强大的 API，着重于渲染 `react` 组件和 `DOM` 节点处理，开发体验十分友好；
+[enzyme][5] 是 `Airbnb` 开源的 `react` 测试类库，提供了一套简洁强大的 API，着重于渲染 `react` 组件和 `DOM` 节点处理，开发体验十分友好；
 
 ### 渲染组件方法
 
@@ -198,7 +200,7 @@ setState(nextState)|设置组件状态
 
 ## React + Jest + Enzyme
 
-首先配置好 `React16`+ `Webpack4` 环境，提供一个参考环境 [Webpack+React配置](https://github.com/imdwpeng/webpack-config) ，这里不再展开介绍；
+首先配置好 `React16`+ `Webpack4` 环境，提供一个参考环境 [Webpack+React配置][6] ，这里不再展开介绍；
 
 ### 安装和配置
 
@@ -239,7 +241,7 @@ import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 ```
 
-`jest` 配置，更多配置见[官网文档](https://jestjs.io/docs/en/configuration)
+`jest` 配置，更多配置见[官网文档][7]
 ```
 // jest.config.js
 module.exports = {
@@ -318,12 +320,21 @@ describe('Input', () => {
 - 测试触发事件方法 `onChange`
 
 终端执行命令 `npm run test`
-![result_2](result_2.png)
+![此处输入图片的描述][8]
 
 
 
 <footer>
 <hr/>
-![footer](footer.gif)
+![footer][https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]
 <p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
 </footer>
+
+  [1]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/index.jpeg
+  [2]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/1.png
+  [3]: https://jestjs.io/docs/en/expect
+  [4]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/result_1.png
+  [5]: https://airbnb.io/enzyme/
+  [6]: https://github.com/imdwpeng/webpack-config
+  [7]: https://jestjs.io/docs/en/configuration
+  [8]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/jest/result_2.png

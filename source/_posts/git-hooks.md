@@ -5,12 +5,15 @@ tags: git
 categories: git
 ---
 
+
 本文主要介绍如何用`git hooks`来进行自动化部署发布我们的代码，省去了我们发布前一系列不必要的打包发布等繁琐步骤。
 
-![title](index.jpeg)
+![此处输入图片的描述][1]
 
 <!--more-->
+
 ## 背景
+
 用`git`管理代码时，每次发布时，我们都需要经过以下步骤：
 
  1. 将本地代码`push`至远程仓库；
@@ -18,59 +21,78 @@ categories: git
  3. 对代码进行编译打包压缩发布等吧啦吧啦各种无趣的操作；
 
 这很是繁琐，本着程序猿（媛）能躺着就不坐着的基本素养，我们是不是能够自动去监测我们的远程仓库，当我们每次`push`之后，它就自动去实现代码的更新编译部署等一系列功能呢？答案是，当然可以。
+
 下面就开始漫漫踩坑路。
 
 ## 自动部署理论
+
 首页，我们要明确项目代码的分布情况：开发者电脑的本地仓库，git服务器上的远程仓库，web服务器上的本地仓库（我们浏览访问的就是这里的代码）。
+
 所谓自动部署，就是当我们将代码从本地仓库push到远程仓库时，自动把代码部署到web服务器上的本地仓库，实现开发者电脑的本地仓库和web服务器上的本地仓库代码同步。
 
 ## git hooks
+
 git有一个神器：[git hooks](https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-Git-%E9%92%A9%E5%AD%90)，没了解过的话可以去官网了解下。
+
 它的功能是能在特定的重要动作发生时触发自定义脚本。 它有两组这样的钩子：客户端的和服务器端的。 客户端钩子由诸如提交和合并这样的操作所调用，而服务器端钩子作用于诸如接收被推送的提交这样的联网操作。 你可以随心所欲地运用这些钩子。
+
 这里我们主要用到服务端的钩子：`post-receive`。
 
 ## 环境搭建
 本例服务器环境：
-&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111
-&emsp;&emsp;&emsp;&emsp;用户：root
+&emsp;&emsp;主机：111.111.111.111
+&emsp;&emsp;用户：root
     
 约定（可自定义）：
-&emsp;&emsp;&emsp;&emsp;裸仓库建在`/home/workspace`下
-&emsp;&emsp;&emsp;&emsp;web本地仓库建在`/home/www`下
-&emsp;&emsp;&emsp;&emsp;所属用户：git
+&emsp;&emsp;裸仓库建在`/home/workspace`下
+&emsp;&emsp;web本地仓库建在`/home/www`下
+&emsp;&emsp;所属用户：git
 
 ### Git服务器搭建
 1.连接至服务器
+
 ssh连接至服务器
+
 ```
 ssh root@111.111.111.111
 ```
-![hook-1](hook-1.png)
+
+![此处输入图片的描述][2]
 
 2.创建git用户
-我们创建一个`git`用户，专门用来运行`git`服务
+
+我们创建一个`git`用户，专门用来运行`git`服务：
+
 ```
 sudo adduser git   创建用户
 sudo passwd git    设置密码
 ```
 
 3.创建裸仓库
-我们在`/home/workspace`文件夹下创建Git裸仓库
+
+我们在`/home/workspace`文件夹下创建Git裸仓库：
+
 ```
 mkdir /home/workspace
 cd /home/workspace
 git init --bare layercake.git
 ```
-![hook-2](hook-2.png)
+
+![此处输入图片的描述][3]
 
 ### 配置Git Hooks
+
 进入`/home/workspace/layercake.git`文件夹，使用`vi post-receive`创建一个脚本。
+
 ```
 cd /home/workspace/layercake.git/hooks
 vi post-receive
 ```
-当我们本地`git push`之后就会触发服务器上的`post-receive`脚本
+
+当我们本地`git push`之后就会触发服务器上的`post-receive`脚本。
+
 `post-receive`内容如下：
+
 ```bash
 #!/bin/sh
  
@@ -78,26 +100,35 @@ unset GIT_DIR
 cd /home/www/layercake
 git pull
 ```
+
 这是一个简单的脚本，文章结尾有更复杂的`post-receive`配置，可以根据不同分支进行不同操作。
 
-再配置`post-receive`权限
+再配置`post-receive`权限：
+
 ```
 chmod +x post-receive
 ```
 
 ### 创建代码仓库
-然后我们在`/home/www`下创建一个代码仓库，关联先前创建的`layercake`仓库
+
+然后我们在`/home/www`下创建一个代码仓库，关联先前创建的`layercake`仓库：
+
 ```
 mkdir /home/www
 cd /home/www
 git clone /home/workspace/layercake.git
 ```
-![hook-3](hook-3.png)
+
+![此处输入图片的描述][4]
 
 ### 配置公钥
+
 如不配置公钥，每次本地`push`时都会要求输入服务器密码，不胜其烦，故我们配置下公钥来跳过这一步骤。
+
 将本机的公钥加入至`/home/git/.ssh/authorized_keys`中，`authorized_keys`文件里包含所有该项目的开发者们的ssh公钥。
-如果没有该文件则创建它：
+
+如果服务器上没有该文件则创建它：
+
 ```
 mkdir /home/git
 cd /home/git
@@ -111,40 +142,49 @@ chmod 644 .ssh/authorized_keys
 
 此时本地会生成`.ssh`文件夹，打开里面的`id_rsa.pub`文件，复制内容粘贴至上面说的`authorized_keys`文件中就即可。
 
-然后设置下仓库所属用户（git）
+然后设置下仓库所属用户（git）：
+
 ```
 sudo chown -R git:git /home/workspace/layercake.git
 sudo chown -R git:git /home/www/layercake
+sudo chown -R git:git /home/git
 ```
 
 ### 本地克隆仓库
-在本地电脑上，克隆服务器上的git仓库
+
+在本地电脑上，克隆服务器上的git仓库：
+
 ```
  git clone git@111.111.111.111:/home/workspace/layercake.git
 ```
+
 按照提示输入服务器密码即可。
-![hook-4](hook-4.png)
+
+![此处输入图片的描述][5]
 
 到此，全部配置已完成，以后每次本地仓库`push`至远程仓库时，都会触发`post-receive`脚本，从而更新`/home/www/layercake`仓库代码。
 
 ## 完整版`post-receive`脚本配置
+
 功能：
 
 1.根据不同分支进行不同操作：
+
 我们可以定义不同分支，当该分支push后触发对应操作，如`dev_debug`分支更新时触发测试库代码更新。
 
 2.跨服务器操作：
-当我们的web服务器代码和服务器上的本地代码位于不同服务器时，通过`scp`命令进行文件或目录的复制。
 
-每次`scp`命令复制时，都需要输入接收服务器的密码，这不是程序猿（媛）的风格，所以我们也采用公钥配置方式来免去输入密码这一步。
+当我们的web服务器代码和服务器上的本地代码位于不同服务器时，通过`rsync`命令进行文件或目录的复制。
+
+每次`rsync`命令复制时，都需要输入接收服务器的密码，这不是程序猿（媛）的风格，所以我们也采用公钥配置方式来免去输入密码这一步。
 
 假如web服务器(F2)：
-&emsp;&emsp;&emsp;&emsp;主机：222.222.222.222
-&emsp;&emsp;&emsp;&emsp;用户：root
+&emsp;&emsp;主机：222.222.222.222
+&emsp;&emsp;用户：root
 
-远程仓库(F1)：
-&emsp;&emsp;&emsp;&emsp;主机：111.111.111.111
-&emsp;&emsp;&emsp;&emsp;用户：git
+本例中远程仓库(F1)：
+&emsp;&emsp;主机：111.111.111.111
+&emsp;&emsp;用户：git
 
 **F1服务器操作：**
 
@@ -267,7 +307,7 @@ do
     if [ $path != "none" ]
     then
         ssh -o StrictHostKeyChecking=no ${user}@${host}
-        
+    
         # -r 拷贝文件夹
         # -v 显示详情
         rsync -r -v $DEPLOY_PATH $path
@@ -276,9 +316,16 @@ do
     echo "======= end ======="
 done
 ```
-
+ 
 <footer>
 <hr/>
 ![footer](http://dwpblog.site/images/footer.gif)
 <p style="textAlign:right;color:#ccc">------------笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p>
 </footer>
+
+
+  [1]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/githook/hook-0.png
+  [2]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/githook/hook-1.png
+  [3]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/githook/hook-2.png
+  [4]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/githook/hook-3.png
+  [5]: https://raw.githubusercontent.com/imdwpeng/photoGallery/master/githook/hook-4.png
