@@ -101,7 +101,8 @@
 <meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/index.jpeg">
 <meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/1.png">
 <meta property="og:image" content="http://dwpblog.site/2017/08/16/css-bfc/2.png">
-<meta property="og:updated_time" content="2019-08-01T08:37:44.797Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif">
+<meta property="og:updated_time" content="2019-08-02T09:10:09.325Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【CSS】BFC原理及应用解析">
 <meta name="twitter:image" content="http://dwpblog.site/2017/08/16/css-bfc/index.jpeg">
@@ -605,7 +606,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  853
+                  843
                 </span>
               
 
@@ -657,7 +658,7 @@
 <h2 id="BFC-应用"><a href="#BFC-应用" class="headerlink" title="BFC 应用"></a>BFC 应用</h2><h3 id="解决浮动"><a href="#解决浮动" class="headerlink" title="解决浮动"></a>解决浮动</h3><p>这个上面讲过了，这里不再重复。</p>
 <h3 id="自适应两栏布局"><a href="#自适应两栏布局" class="headerlink" title="自适应两栏布局"></a>自适应两栏布局</h3><p>采用<code>float + overflow:hidden</code>布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">    width: 250px;</span><br><span class="line">    border: 1px solid #000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.aside &#123;</span><br><span class="line">    float: left;</span><br><span class="line">    margin: 10px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 25px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.main &#123;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background: red;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;aside&quot;&gt;aside&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;main&quot;&gt;main&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
 <p>aside模块设置<code>float:left</code>，main模块设置<code>overflow:hidden</code>，两者都是<code>BFC</code>，所以相互独立，互不影响。</p>
-<footer><br><hr><br>![footer][<a href="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]" target="_blank" rel="external">https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]</a><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
+<footer><br><hr><br><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif" alt="footer"><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
 
 
       
