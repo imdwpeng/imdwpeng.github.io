@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="hexo," />
+  <meta name="keywords" content="flutter," />
 
 
 
@@ -92,21 +92,43 @@
 
 
 
-<meta name="description" content="本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。">
-<meta name="keywords" content="hexo">
+<meta name="description" content="Flutter是谷歌的移动UI框架，可以快速在iOS和Android上构建高质量的原生用户界面。 Flutter可以与现有的代码一起工作。在全世界，Flutter正在被越来越多的开发者和组织使用，并且Flutter是完全免费、开源的。">
+<meta name="keywords" content="flutter">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo + github 免费搭建自己的博客">
-<meta property="og:url" content="http://dwpblog.site/2017/06/04/hexo-github/index.html">
+<meta property="og:title" content="Flutter 入坑记（一：环境搭建）">
+<meta property="og:url" content="http://dwpblog.site/2019/08/02/flutter-1/index.html">
 <meta property="og:site_name" content="DWP&#39;s Blog">
-<meta property="og:description" content="本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。">
+<meta property="og:description" content="Flutter是谷歌的移动UI框架，可以快速在iOS和Android上构建高质量的原生用户界面。 Flutter可以与现有的代码一起工作。在全世界，Flutter正在被越来越多的开发者和组织使用，并且Flutter是完全免费、开源的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o71mbfad2.bkt.clouddn.com/07_hexo-blog-basic1_80.jpg">
-<meta property="og:image" content="http://dwpblog.site/2017/06/04/hexo-github/1.png">
-<meta property="og:updated_time" content="2019-08-01T08:37:44.863Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/index.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/path.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_0.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_plugins_1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_plugins.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor_3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_5.jpg">
+<meta property="og:updated_time" content="2019-08-02T09:03:34.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo + github 免费搭建自己的博客">
-<meta name="twitter:description" content="本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。">
-<meta name="twitter:image" content="http://o71mbfad2.bkt.clouddn.com/07_hexo-blog-basic1_80.jpg">
+<meta name="twitter:title" content="Flutter 入坑记（一：环境搭建）">
+<meta name="twitter:description" content="Flutter是谷歌的移动UI框架，可以快速在iOS和Android上构建高质量的原生用户界面。 Flutter可以与现有的代码一起工作。在全世界，Flutter正在被越来越多的开发者和组织使用，并且Flutter是完全免费、开源的。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/index.jpeg">
 
 
 
@@ -134,14 +156,14 @@
 
 
 
-  <link rel="canonical" href="http://dwpblog.site/2017/06/04/hexo-github/"/>
+  <link rel="canonical" href="http://dwpblog.site/2019/08/02/flutter-1/"/>
 
 
 
 
 
 
-  <title>hexo + github 免费搭建自己的博客 | DWP's Blog</title>
+  <title>Flutter 入坑记（一：环境搭建） | DWP's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -502,7 +524,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2017/06/04/hexo-github/">
+    <link itemprop="mainEntityOfPage" href="http://dwpblog.site/2019/08/02/flutter-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="DWP">
@@ -519,7 +541,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hexo + github 免费搭建自己的博客</h1>
+          <h1 class="post-title" itemprop="name headline">Flutter 入坑记（一：环境搭建）</h1>
         
 
         <div class="post-meta">
@@ -531,8 +553,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-04T11:19:24+08:00">
-                2017-06-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-02T16:59:45+08:00">
+                2019-08-02
               </time>
             
 
@@ -554,8 +576,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">hexo</span>
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
                   </a>
                 </span>
 
@@ -573,8 +595,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/06/04/hexo-github/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/06/04/hexo-github/" itemprop="commentsCount"></span>
+                <a href="/2019/08/02/flutter-1/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/08/02/flutter-1/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -582,7 +604,7 @@
 
           
           
-             <span id="/2017/06/04/hexo-github/" class="leancloud_visitors" data-flag-title="hexo + github 免费搭建自己的博客">
+             <span id="/2019/08/02/flutter-1/" class="leancloud_visitors" data-flag-title="Flutter 入坑记（一：环境搭建）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -607,7 +629,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,659
+                  615
                 </span>
               
 
@@ -623,7 +645,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  6
+                  3
                 </span>
               
             </div>
@@ -641,95 +663,101 @@
       
 
       
-        <p><img src="http://o71mbfad2.bkt.clouddn.com/07_hexo-blog-basic1_80.jpg" alt="hexo"></p>
-<p>本文利用hexo+github免费搭建属于自己的博客，好记性不如烂笔头，在这里整理一下相关教程。</p>
+        <p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/index.jpeg" alt="此处输入图片的描述"></p>
+<p>Flutter是谷歌的移动UI框架，可以快速在iOS和Android上构建高质量的原生用户界面。 Flutter可以与现有的代码一起工作。在全世界，Flutter正在被越来越多的开发者和组织使用，并且Flutter是完全免费、开源的。</p>
 <a id="more"></a>
-<h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo"></a>什么是Hexo</h2><p> <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上。</p>
-<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><ul>
-<li><strong>Node</strong> :<br>  由于 Hexo 是基于 Node ，安装前要先安装 <a href="https://nodejs.org/en/download/" target="_blank" rel="external">Node</a>，根据自己系统选择对应的版本安装即可。</li>
-<li><strong>Hexo</strong> :<br>  执行如下命令安装Hexo：(全局安装，MAC系统需在指令前加sudo，然后提示输入本机密码)</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<h2 id="安装博客所需文件"><a href="#安装博客所需文件" class="headerlink" title="安装博客所需文件"></a>安装博客所需文件</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /</span><br><span class="line">hexo init Hexo</span><br><span class="line">cd /Hexo</span><br><span class="line">npm install</span><br><span class="line">hexo generate（可简写为hexo g）</span><br><span class="line">hexo sever（可简写为hexo s)</span><br></pre></td></tr></table></figure>
-<p>命令解释:</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>这里以 <code>win10</code> 系统为例</p>
+<h3 id="下载-Flutter-安装包"><a href="#下载-Flutter-安装包" class="headerlink" title="下载 Flutter 安装包"></a>下载 <code>Flutter</code> 安装包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b stable https://github.com/flutter/flutter.git</span><br></pre></td></tr></table></figure>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p><code>控制面板&gt;用户帐户&gt;用户帐户&gt;更改我的环境变量</code></p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>变量值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PUB_HOSTED_URL</td>
+<td><a href="https://pub.flutter-io.cn" target="_blank" rel="external">https://pub.flutter-io.cn</a></td>
+</tr>
+<tr>
+<td>FLUTTER_STORAGE_BASE_URL</td>
+<td><a href="https://storage.flutter-io.cn" target="_blank" rel="external">https://storage.flutter-io.cn</a></td>
+</tr>
+<tr>
+<td>Path</td>
+<td>追加变量 <code>安装包路径\flutter\bin</code></td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/path.jpg" alt="此处输入图片的描述"></p>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><p>检测是否需要安装任何依赖项来完成安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter doctor</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor.jpg" alt="此处输入图片的描述"></p>
+<p>根据提示进行处理</p>
+<ol>
+<li>安装 <code>Android Studio</code></li>
+</ol>
+<p>提示的下载路径需要翻墙，这里提供一个不用翻墙的下载路径 <a href="http://www.android-studio.org/" target="_blank" rel="external">Android studio中文网</a></p>
+<p>下载好后打开直接点击下一步安装</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_0.jpg" alt="此处输入图片的描述"></p>
+<p>点击 <code>cancel</code><br><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_1.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_setup_2.jpg" alt="此处输入图片的描述"></p>
+<p>安装好后，进入 <code>Android studio</code> ，点击 <code>Plugins</code> ,搜索 <code>Flutter</code> 进行安装</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_plugins_1.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_plugins.jpg" alt="此处输入图片的描述"></p>
+<ol>
+<li>安装 <code>Flutter extension</code></li>
+</ol>
+<p>访问 <a href="https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter" target="_blank" rel="external">Flutter extension</a> 进行安装</p>
+<p>安装完成后再运行 <code>flutter doctor</code> 进行检测</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor_2.jpg" alt="此处输入图片的描述"></p>
+<p>按提示执行命令，然后一直输入 <code>y</code> 即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter doctor --android-licenses</span><br></pre></td></tr></table></figure></p>
+<p>再运行 <code>flutter doctor</code> 检测</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/doctor_3.jpg" alt="此处输入图片的描述"></p>
+<h3 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h3><p>重新打开 <code>Android studio</code> ，选择 <code>Start a new Flutter project</code></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_1.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_2.jpg" alt="此处输入图片的描述"></p>
+<p>设置项目名称和存储位置</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_3.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_4.jpg" alt="此处输入图片的描述"></p>
+<h3 id="运行应用"><a href="#运行应用" class="headerlink" title="运行应用"></a>运行应用</h3><p>配置模拟器</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_1.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_2.jpg" alt="此处输入图片的描述"></p>
+<p>选择一个模拟器设备</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_3.jpg" alt="此处输入图片的描述"></p>
+<p>选择一个镜像，下载</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/manager_4.jpg" alt="此处输入图片的描述"></p>
+<p>启动应用（首次启动时间较长）</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_5.jpg" alt="此处输入图片的描述"></p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/studio_start_6.jpg" alt="此处输入图片的描述"></p>
+<h2 id="报错记录"><a href="#报错记录" class="headerlink" title="报错记录"></a>报错记录</h2><ol>
+<li>命令行执行 <code>flutter doctor</code><br>报错：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error: The Flutter directory is not a clone of the GitHub project.</span><br><span class="line">       The flutter tool requires Git in order to operate properly;</span><br><span class="line">       to set up Flutter, run the following command:</span><br><span class="line">       git clone -b stable https://github.com/flutter/flutter.git</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>解决方法:<br>删除下载的Flutter安装包，执行以下命令获取安装包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b stable https://github.com/flutter/flutter.git</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><code>Android studio</code> 安装报错</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_2.jpg" alt="此处输入图片的描述"></p>
+<p>原因：win10 系统启用了 <code>Hyper-V</code><br>解决方法：</p>
 <ul>
-<li><p>cd / 这里返回的根目录取决于你在github客户端的设置，我设置的是F盘，所以返回得也是F盘，所以下面创建的Hexo文件夹也在F盘。</p>
-</li>
-<li><p>Hexo 这个文件名可以随便命名，存放的是博客的总目录文件夹。</p>
-</li>
-<li><p>cd /Hexo 指向Hexo目录</p>
-</li>
-<li><p>npm instal 安装依赖文件</p>
-</li>
-<li><p>hexo g 编译</p>
-</li>
-<li><p>hexo s 开启本地服务(第5、6步的操作可以合并成hexo s -g)</p>
-</li>
+<li>管理员身份运行cmd</li>
+<li>执行 <code>bcdedit /enum</code></li>
 </ul>
-<p>此时打开浏览器，在地址栏输入<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a><br>即可查看博客的原型；如果“显示无法访问此网站”也不要沮丧，我这步是直接看到页面的，你无法访问的原因可能你没有翻墙，因为页面中默认使用了ajax.google.com 下的js包。</p>
-<p>那么如何翻墙呢？ 下面提供我所知道的两种方法：</p>
-<p>这种方法比较简单，下载安装运行Lantern，可以官网下载的吧！这里提供一下安装包吧，链接: <a href="http://pan.baidu.com/s/1c2x7eRu" target="_blank" rel="external">http://pan.baidu.com/s/1c2x7eRu</a><br>密码: z3kw</p>
-<p>这种方法需要修改hosts文件，我的 hosts 文件路径：C:\Windows\System32\drivers\etc ，详细攻略：<a href="http://blog.my-eclipse.cn/host-google.html" target="_blank" rel="external">http://blog.my-eclipse.cn/host-google.html</a></p>
-<p>如果你不想翻墙，可以采用这种方法：<br>进入你刚新建好的 blog根目录</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">themes/landscape/layout/_partial</span><br></pre></td></tr></table></figure>
-<p>1，找到 after-footer.ejs把</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js“ &gt; &lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
-<p>替换成<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js“ &gt; &lt;/script&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>2，找到 header.ejs<br>注释掉或者删掉 下面这句css引用</p>
-<p>&lt;link href=”//fonts.googleapis.com/css?family=Source+Code+Pro” rel=”stylesheet” type=”text/css”&gt;<br>hexo server 之后。访问 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 就会看到blog主页了。</p>
-<h2 id="部署博客到服务器"><a href="#部署博客到服务器" class="headerlink" title="部署博客到服务器"></a>部署博客到服务器</h2><p>也就是把博客部署到github page提供的服务器上</p>
-<p>步骤</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_3.jpg" alt="此处输入图片的描述"></p>
 <ul>
-<li><strong>首先退出本地服务，即在终端按ctrl+c即可</strong></li>
-<li><p><strong>创建一个新的repository</strong></p>
-<p>  在自己的Github主页右下角,创建一个新的repository。比如我的Github用户名为imdwpeng，那么我创建的repository的名字应该是 imdwpeng.github.io 。</p>
-<p>  <img src="/2017/06/04/hexo-github/1.png" alt="github"></p>
-</li>
-<li><p><strong>修改Hexo文件夹下_config.yml文件</strong><br>  如下图所示修改，repository后的地址要改成你自己的地址：</p>
-</li>
+<li>执行 <code>bcdedit /set {current} hypervisorlaunchtype off</code></li>
+<li>电脑重启</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repository: http:<span class="comment">//github.com/usename/usename.github.io.git (改成自己的地址)</span></span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure>
-<ul>
-<li>然后在终端输入以下指令：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>命令解释:</p>
-<ul>
-<li>hexo clean 清除public，当 source 文件夹中的部分资源更改过之后，特别是对文件进行了删除或者路径的改变之后，需要执行这个命令，然后重新编译。</li>
-<li>hexo g 编译，一般部署上去的时候都需要编译一下，编译后，会出现一个 public 文件夹，将所有的md文件编译成html文件</li>
-<li>hexo d 部署博客到github上，如果一切顺利，你就通过访问usename.github.io访问你的博客了！<br>是的，现在你拥有了自己的博客！</li>
-<li>hexo s 开启本地服务 (本地测试用，如不需要则忽略本指令)</li>
-</ul>
-<h2 id="新建博文"><a href="#新建博文" class="headerlink" title="新建博文"></a>新建博文</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">new</span> 新博文的名字</span><br></pre></td></tr></table></figure>
-<p>即可在 Hexo\source_posts 目录中找到”新博文的名字.md”这个文件。你就可以使用maekdown编辑器打开进行编写博客内容了。关于markdown语法，可以参考<a href="http://www.appinn.com/markdown/" target="_blank" rel="external">Markdown简明语法</a>。</p>
-<h2 id="文章摘要"><a href="#文章摘要" class="headerlink" title="文章摘要"></a>文章摘要</h2><p>在需要显示摘要的地方添加如下代码即可：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">以上是摘要</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">以下是余下全文</span><br></pre></td></tr></table></figure></p>
-<p>more以上内容即是文章摘要，在主页显示，more以下内容点击『&gt; Read More』链接打开全文才显示。</p>
-<p>##优雅的在博客上插入图片</p>
-<p>看到很多博客上说使用七牛，但是这种方法可能是用着最爽的，我们来看一下如何使用：</p>
-<p>首先确认 _config.yml 中更改 post_asset_folder:true 。<br>回到终端，输入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install https:<span class="comment">//github.com/CodeFalling/hexo-asset-image –save</span></span><br></pre></td></tr></table></figure></p>
-<p>继续执行<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
-<p>重新创建一个博客名字，然后发现Hexo\source_posts下多了一个与博客名字相同的空文件夹</p>
-<p>然后就可以把我们博客中要用到的图片存放在这个文件夹下，需要时直接引用即可，是不是特别方便？</p>
-<h2 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h2><p>你可以在<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">Themes·Hexo</a>上选择你喜欢的主题，我使用的Next主题</p>
-<h3 id="安装Next主题"><a href="#安装Next主题" class="headerlink" title="安装Next主题"></a>安装Next主题</h3><p>参考<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="external">Next官方文档</a>,内容十分详尽！</p>
-<p>安装主题的方法就是一句git命令：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/iissnan/hexo-theme-next themes/next</span></span><br></pre></td></tr></table></figure>
-<p>目录是否是next无所谓，只要与_config.yml文件一致即可。</p>
-<p>安装完成后，打开hexo_config.yml，修改主题为next</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
-<h2 id="构建新页面"><a href="#构建新页面" class="headerlink" title="构建新页面"></a>构建新页面</h2><p>那些小图标都是一个新页面，需要手动创建，那么如何创建？</p>
-<p>回到终端<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">new</span> page “页面名称”</span><br></pre></td></tr></table></figure></p>
-<p>比如你要创建一个about页面，就输入hexo new page “about”</p>
-<p>正确显示各页面内容</p>
-<p>发表博文后发现点击上面建立的页面后发现是空白页，比如，打开标签页面，发现是空白，或者提示找不到！</p>
-<p>解决方法：以标签页为例，打开Hexo\source\tags下index.md文件，修改如下：</p>
-<p>comments: false即关闭此页面的评论功能</p>
-<p>type: “tags”这里的值根据你想更改的页面决定</p>
-<p>更改过后，在重新部署到github上，你就可以点击各个页面查看</p>
-<p>更多高级功能可以查看<a href="http://cherryblog.site/Hexo-high-level-tutorialcloudmusic,bg-customthemes-statistical.html" target="_blank" rel="external">hexo高阶教程next主题优化之加入网易云音乐、网易云跟帖、动态背景、自定义主题、统计功能</a>文章。</p>
+<ol>
+<li><code>Android studio</code> 点击 <code>run</code> 时报错</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error connecting to the service protocol: HttpException: Connection closed before full header was received, uri = http://127.0.0.1:59246/77os7RRzy6g=/ws</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_4.jpg" alt="此处输入图片的描述"></p>
+<p>原因：镜像版本过高<br>解决方法：选择低版本的镜像</p>
+<p><img src="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/flutter/error_5.jpg" alt="此处输入图片的描述"></p>
 <footer><br><hr><br>![footer][<a href="https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]" target="_blank" rel="external">https://raw.githubusercontent.com/imdwpeng/photoGallery/master/footer.gif]</a><br><p style="textAlign:right;color:#ccc">————笑对人生，能穿透迷雾；笑对人生，能坚持到底；笑对人生，能化解危机；笑对人生，能照亮黑暗。</p><br></footer>
-
-
       
     </div>
 
@@ -779,7 +807,7 @@
       
         <div class="post-tags">
           
-            <a class="footer-tags" href="/tags/hexo/" rel="tag">hexo</a>
+            <a class="footer-tags" href="/tags/flutter/" rel="tag">flutter</a>
           
         </div>
       
@@ -792,8 +820,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/03/css-clear/" rel="next" title="【css】常见的清除浮动方法">
-                <i class="fa fa-chevron-left"></i> 【css】常见的清除浮动方法
+              <a href="/2019/04/02/jest/" rel="next" title="【前端测试】基于Jest+Enzyme+React的前端测试">
+                <i class="fa fa-chevron-left"></i> 【前端测试】基于Jest+Enzyme+React的前端测试
               </a>
             
           </div>
@@ -801,10 +829,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/16/JSDesignPatterns/" rel="prev" title="JavaScript设计模式">
-                JavaScript设计模式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -946,7 +970,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Hexo"><span class="nav-number">1.</span> <span class="nav-text">什么是Hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置环境"><span class="nav-number">2.</span> <span class="nav-text">配置环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装博客所需文件"><span class="nav-number">3.</span> <span class="nav-text">安装博客所需文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署博客到服务器"><span class="nav-number">4.</span> <span class="nav-text">部署博客到服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建博文"><span class="nav-number">5.</span> <span class="nav-text">新建博文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文章摘要"><span class="nav-number">6.</span> <span class="nav-text">文章摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装主题"><span class="nav-number">7.</span> <span class="nav-text">安装主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Next主题"><span class="nav-number">7.1.</span> <span class="nav-text">安装Next主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建新页面"><span class="nav-number">8.</span> <span class="nav-text">构建新页面</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载-Flutter-安装包"><span class="nav-number">1.1.</span> <span class="nav-text">下载 Flutter 安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装依赖"><span class="nav-number">1.3.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建应用"><span class="nav-number">1.4.</span> <span class="nav-text">创建应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行应用"><span class="nav-number">1.5.</span> <span class="nav-text">运行应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报错记录"><span class="nav-number">2.</span> <span class="nav-text">报错记录</span></a></li></ol></div>
             
 
           </div>
